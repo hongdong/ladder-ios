@@ -5,8 +5,8 @@ use_frameworks!
 inhibit_all_warnings!
 
 target 'Ladder' do
+  pod 'Eureka', '~> 4.1.1'
   pod 'KeychainAccess', '~> 3.1.0'
-  pod 'SnapKit', '~> 4.0.0'
 
   target 'PacketTunnel' do
     inherit! :search_paths

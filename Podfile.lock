@@ -1,21 +1,21 @@
 PODS:
   - CocoaAsyncSocket (7.6.3)
   - CryptoSwift (0.9.0)
+  - Eureka (4.1.1)
   - KeychainAccess (3.1.0)
-  - SnapKit (4.0.0)
 
 DEPENDENCIES:
   - CocoaAsyncSocket (~> 7.6.3)
   - CryptoSwift (~> 0.9.0)
+  - Eureka (~> 4.1.1)
   - KeychainAccess (~> 3.1.0)
-  - SnapKit (~> 4.0.0)
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
   CryptoSwift: bca8c5b653dcc2d9734409242a070ff53bafac86
+  Eureka: b88fb930e42c79f8c03c373d0fcdc28c1d6c50ed
   KeychainAccess: 94c5540b32eabf7bc32bfb976a268e8ea05fd6da
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
 
-PODFILE CHECKSUM: 93294ea5c75d6c949f6562b646d4ad01736763d8
+PODFILE CHECKSUM: 6bfcb2f66da676927910a8b07ef14ab64777f439
 
 COCOAPODS: 1.4.0

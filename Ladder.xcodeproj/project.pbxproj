@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		04182F1F20733C95001D228D /* TableViewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04182F1E20733C95001D228D /* TableViewSection.swift */; };
-		04182F2120733D5F001D228D /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04182F2020733D5F001D228D /* TableViewCell.swift */; };
 		0445F9AF20676962003993A3 /* Shadowsocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0445F9AE20676962003993A3 /* Shadowsocks.swift */; };
 		04D1D0BE2065513200F5C4B9 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */; };
 		04D1D0BF2065513D00F5C4B9 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */; };
@@ -48,8 +46,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		04182F1E20733C95001D228D /* TableViewSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSection.swift; sourceTree = "<group>"; };
-		04182F2020733D5F001D228D /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		0445F9AE20676962003993A3 /* Shadowsocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shadowsocks.swift; sourceTree = "<group>"; };
 		045AE401659F24A0DAD865B2 /* Pods-Ladder-PacketTunnel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ladder-PacketTunnel.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ladder-PacketTunnel/Pods-Ladder-PacketTunnel.debug.xcconfig"; sourceTree = "<group>"; };
 		04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
@@ -122,8 +118,6 @@
 			children = (
 				04EA46082064C9B7002578AF /* AppDelegate.swift */,
 				04EA460A2064C9B7002578AF /* ViewController.swift */,
-				04182F2020733D5F001D228D /* TableViewCell.swift */,
-				04182F1E20733C95001D228D /* TableViewSection.swift */,
 				04EA46142064C9B7002578AF /* Info.plist */,
 				04EA462B2064CFA9002578AF /* Ladder.entitlements */,
 				04EA460F2064C9B7002578AF /* Assets.xcassets */,
@@ -335,15 +329,15 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Ladder/Pods-Ladder-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Eureka/Eureka.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework",
-				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Eureka.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainAccess.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 			);
@@ -389,8 +383,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04182F1F20733C95001D228D /* TableViewSection.swift in Sources */,
-				04182F2120733D5F001D228D /* TableViewCell.swift in Sources */,
 				04EA460B2064C9B7002578AF /* ViewController.swift in Sources */,
 				04EA46092064C9B7002578AF /* AppDelegate.swift in Sources */,
 			);
