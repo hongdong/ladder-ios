@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		window.backgroundColor = .white
-		window.rootViewController = UINavigationController(rootViewController: ViewController())
+		window.rootViewController = UINavigationController(rootViewController: ViewController(style: .grouped))
 		window.makeKeyAndVisible()
 
 		return true
