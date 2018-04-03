@@ -45,15 +45,15 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 		networkSettings.mtu = 1500
 
 		setTunnelNetworkSettings(networkSettings) { error in
-			if let error = error {
-				completionHandler(error)
-			} else {
+			if error == nil {
 				do {
 					try self.shadowsocks?.start()
 				} catch let error {
 					completionHandler(error)
+					return
 				}
 			}
+			completionHandler(error)
 		}
 	}
 
