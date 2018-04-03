@@ -6,24 +6,18 @@
 //  Copyright © 2018 Beijing Corestate Technology Co., Ltd. All rights reserved.
 //
 
-import CocoaAsyncSocket
 import CryptoSwift
 
-class Shadowsocks: NSObject, GCDAsyncSocketDelegate {
-	let queue = DispatchQueue(label: "ShadowsocksQueue")
-
-	var serverAddress: String!
-	var serverPort: UInt16!
-	var localAddress: String!
-	var localPort: UInt16!
-	var password: String!
-	var method: String!
-	var cipher: Cipher!
-	var localSocket: GCDAsyncSocket!
+class Shadowsocks {
+	let serverAddress: String
+	let serverPort: UInt16
+	let localAddress: String
+	let localPort: UInt16
+	let password: String
+	let method: String
+	let cipher: Cipher
 
 	init(serverAddress: String, serverPort: UInt16, localAddress: String, localPort: UInt16, password: String, method: String) {
-		super.init()
-
 		self.serverAddress = serverAddress
 		self.serverPort = serverPort
 		self.localAddress = localAddress
@@ -55,20 +49,11 @@ class Shadowsocks: NSObject, GCDAsyncSocketDelegate {
 			}
 			cipher = try! AES(key: key.bytes, blockMode: .CFB(iv: iv.bytes))
 		}
-
-		localSocket = GCDAsyncSocket(socketQueue: queue)
 	}
 
 	func start() throws {
-		localSocket.setDelegate(self, delegateQueue: queue)
-		try localSocket.accept(onInterface: localAddress, port: localPort)
 	}
 
 	func stop() {
-		localSocket.setDelegate(nil, delegateQueue: nil)
-		localSocket.disconnect()
-	}
-
-	func socket(_: GCDAsyncSocket, didAcceptNewSocket _: GCDAsyncSocket) {
 	}
 }
