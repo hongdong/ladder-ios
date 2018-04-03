@@ -1,0 +1,42 @@
+//
+//  Localizable.strings
+//  Ladder
+//
+//  Created by Aofei Sheng on 2018/4/3.
+//  Copyright © 2017 Beijing Corestate Technology Co., Ltd. All rights reserved.
+//
+
+"Ladder" = "Ladder";
+
+"OK" = "OK";
+"Cancel" = "Cancel";
+
+"PAC" = "PAC";
+"Enter URL here" = "Enter URL here";
+
+"Shadowsocks" = "Shadowsocks";
+"Server Address" = "Server Address";
+"Enter server address here" = "Enter server address here";
+"Server Port" = "Server Port";
+"Enter server port here" = "Enter server port here";
+"Local Address" = "Local Address";
+"Enter local address here" = "Enter local address here";
+"Local Port" = "Local Port";
+"Enter local port here" = "Enter local port here";
+"Password" = "Password";
+"Enter password here" = "Enter password here";
+"Method" = "Method";
+"Shadowsocks Method" = "Shadowsocks Method";
+
+"Configure" = "Configure";
+"Configuring..." = "Configuring...";
+"Configured!" = "Configured!";
+"Configuration Failed" = "Configuration Failed";
+"Please enter a valid PAC URL." = "Please enter a valid PAC URL.";
+"Please enter a valid Shadowsocks server address." = "Please enter a valid Shadowsocks server address.";
+"Please enter a valid Shadowsocks server port." = "Please enter a valid Shadowsocks server port.";
+"Please enter a valid Shadowsocks local address." = "Please enter a valid Shadowsocks local address.";
+"Please enter a valid Shadowsocks local port." = "Please enter a valid Shadowsocks local port.";
+"Please enter a valid Shadowsocks password." = "Please enter a valid Shadowsocks password.";
+"Please select a valid Shadowsocks method." = "Please select a valid Shadowsocks method.";
+"Please try again." = "Please try again.";

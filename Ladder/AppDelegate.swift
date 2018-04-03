@@ -10,7 +10,7 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-	private let window = UIWindow(frame: UIScreen.main.bounds)
+	let window = UIWindow(frame: UIScreen.main.bounds)
 
 	func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		window.backgroundColor = .white

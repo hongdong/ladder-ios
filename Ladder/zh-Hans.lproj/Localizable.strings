@@ -1,0 +1,42 @@
+//
+//  Localizable.strings
+//  Ladder
+//
+//  Created by Aofei Sheng on 2018/4/3.
+//  Copyright © 2017 Beijing Corestate Technology Co., Ltd. All rights reserved.
+//
+
+"Ladder" = "梯子";
+
+"OK" = "好";
+"Cancel" = "取消";
+
+"PAC" = "代理自动配置";
+"Enter URL here" = "在这里输入 URL";
+
+"Shadowsocks" = "影梭";
+"Server Address" = "服务器地址";
+"Enter server address here" = "在这里输入服务器地址";
+"Server Port" = "服务器端口";
+"Enter server port here" = "在这里输入服务器端口";
+"Local Address" = "本地地址";
+"Enter local address here" = "在这里输入本地地址";
+"Local Port" = "本地端口";
+"Enter local port here" = "在这里输入本地端口";
+"Password" = "密码";
+"Enter password here" = "在这里输入密码";
+"Method" = "方法";
+"Shadowsocks Method" = "影梭方法";
+
+"Configure" = "配置";
+"Configuring..." = "配置中……";
+"Configured!" = "已配置！";
+"Configuration Failed" = "配置失败";
+"Please enter a valid PAC URL." = "请输入一个有效的代理自动配置 URL。";
+"Please enter a valid Shadowsocks server address." = "请输入一个有效的影梭服务器地址。";
+"Please enter a valid Shadowsocks server port." = "请输入一个有效的影梭服务器端口。";
+"Please enter a valid Shadowsocks local address." = "请输入一个有效的影梭本地地址。";
+"Please enter a valid Shadowsocks local port." = "请输入一个有效的影梭本地端口。";
+"Please enter a valid Shadowsocks password." = "请输入一个有效的影梭密码。";
+"Please select a valid Shadowsocks method." = "请选择一个有效的影梭方法。";
+"Please try again." = "请再试一次。";
