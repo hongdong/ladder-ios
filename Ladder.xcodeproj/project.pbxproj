@@ -10,6 +10,9 @@
 		0445F9AF20676962003993A3 /* Shadowsocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0445F9AE20676962003993A3 /* Shadowsocks.swift */; };
 		0485CBE72073838C003F596A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0485CBE52073838C003F596A /* InfoPlist.strings */; };
 		0485CBEB207383E6003F596A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0485CBE9207383E6003F596A /* Localizable.strings */; };
+		0495EA552073D49000320501 /* Eureka.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA542073D49000320501 /* Eureka.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		0495EA572073D49C00320501 /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA562073D49B00320501 /* KeychainAccess.framework */; };
+		0495EA5A2073D77500320501 /* NEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA592073D77500320501 /* NEKit.framework */; };
 		04D1D0BE2065513200F5C4B9 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */; };
 		04D1D0BF2065513D00F5C4B9 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */; };
 		04EA46092064C9B7002578AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EA46082064C9B7002578AF /* AppDelegate.swift */; };
@@ -18,9 +21,6 @@
 		04EA46132064C9B7002578AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04EA46112064C9B7002578AF /* LaunchScreen.storyboard */; };
 		04EA46362064D10E002578AF /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EA46352064D10E002578AF /* PacketTunnelProvider.swift */; };
 		04EA463B2064D10E002578AF /* PacketTunnel.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 04EA46332064D10E002578AF /* PacketTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		2F94F778861AE7CA50F700C0 /* Pods_Ladder_PacketTunnel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747FB3B29A6FEA3B7672032C /* Pods_Ladder_PacketTunnel.framework */; };
-		32E7236480B31DB771CC3090 /* Pods_Ladder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17727E77D2B2F32468401DDA /* Pods_Ladder.framework */; };
-		4183A76EB3D2A32116374D65 /* Pods_PacketTunnel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E90DEA792CED3FA4A255427F /* Pods_PacketTunnel.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,12 +49,14 @@
 
 /* Begin PBXFileReference section */
 		0445F9AE20676962003993A3 /* Shadowsocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shadowsocks.swift; sourceTree = "<group>"; };
-		045AE401659F24A0DAD865B2 /* Pods-Ladder-PacketTunnel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ladder-PacketTunnel.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ladder-PacketTunnel/Pods-Ladder-PacketTunnel.debug.xcconfig"; sourceTree = "<group>"; };
 		0485CBE4207381AC003F596A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		0485CBE62073838C003F596A /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0485CBE8207383B6003F596A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		0485CBEA207383E6003F596A /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0485CBEC20738401003F596A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		0495EA542073D49000320501 /* Eureka.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eureka.framework; path = Carthage/Build/iOS/Eureka.framework; sourceTree = "<group>"; };
+		0495EA562073D49B00320501 /* KeychainAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KeychainAccess.framework; path = Carthage/Build/iOS/KeychainAccess.framework; sourceTree = "<group>"; };
+		0495EA592073D77500320501 /* NEKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NEKit.framework; path = Carthage/Build/iOS/NEKit.framework; sourceTree = "<group>"; };
 		04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		04EA46052064C9B7002578AF /* Ladder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ladder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04EA46082064C9B7002578AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -67,14 +69,6 @@
 		04EA46352064D10E002578AF /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
 		04EA46372064D10E002578AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04EA46382064D10E002578AF /* PacketTunnel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PacketTunnel.entitlements; sourceTree = "<group>"; };
-		17727E77D2B2F32468401DDA /* Pods_Ladder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ladder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		34FBF8A0C737A5676648021D /* Pods-Ladder-PacketTunnel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ladder-PacketTunnel.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ladder-PacketTunnel/Pods-Ladder-PacketTunnel.release.xcconfig"; sourceTree = "<group>"; };
-		4DF2758498417F8A9B5F5CB0 /* Pods-Ladder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ladder.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ladder/Pods-Ladder.debug.xcconfig"; sourceTree = "<group>"; };
-		5A5929D2D57566F2F0E0200B /* Pods-Ladder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ladder.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ladder/Pods-Ladder.release.xcconfig"; sourceTree = "<group>"; };
-		69E373F6ADD4CC82FAD29AB0 /* Pods-PacketTunnel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PacketTunnel.release.xcconfig"; path = "Pods/Target Support Files/Pods-PacketTunnel/Pods-PacketTunnel.release.xcconfig"; sourceTree = "<group>"; };
-		747FB3B29A6FEA3B7672032C /* Pods_Ladder_PacketTunnel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ladder_PacketTunnel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9CB38D230EFD4D8655CD6B02 /* Pods-PacketTunnel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PacketTunnel.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PacketTunnel/Pods-PacketTunnel.debug.xcconfig"; sourceTree = "<group>"; };
-		E90DEA792CED3FA4A255427F /* Pods_PacketTunnel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PacketTunnel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,8 +76,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0495EA552073D49000320501 /* Eureka.framework in Frameworks */,
+				0495EA572073D49C00320501 /* KeychainAccess.framework in Frameworks */,
 				04D1D0BE2065513200F5C4B9 /* NetworkExtension.framework in Frameworks */,
-				32E7236480B31DB771CC3090 /* Pods_Ladder.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,9 +86,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0495EA5A2073D77500320501 /* NEKit.framework in Frameworks */,
 				04D1D0BF2065513D00F5C4B9 /* NetworkExtension.framework in Frameworks */,
-				2F94F778861AE7CA50F700C0 /* Pods_Ladder_PacketTunnel.framework in Frameworks */,
-				4183A76EB3D2A32116374D65 /* Pods_PacketTunnel.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,7 +101,6 @@
 				04EA46342064D10E002578AF /* PacketTunnel */,
 				04EA462C2064CFE2002578AF /* Frameworks */,
 				04EA46062064C9B7002578AF /* Products */,
-				7DC88F428E146CA95451CBD9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -138,10 +131,10 @@
 		04EA462C2064CFE2002578AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0495EA542073D49000320501 /* Eureka.framework */,
+				0495EA562073D49B00320501 /* KeychainAccess.framework */,
+				0495EA592073D77500320501 /* NEKit.framework */,
 				04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */,
-				17727E77D2B2F32468401DDA /* Pods_Ladder.framework */,
-				747FB3B29A6FEA3B7672032C /* Pods_Ladder_PacketTunnel.framework */,
-				E90DEA792CED3FA4A255427F /* Pods_PacketTunnel.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -157,19 +150,6 @@
 			path = PacketTunnel;
 			sourceTree = "<group>";
 		};
-		7DC88F428E146CA95451CBD9 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				4DF2758498417F8A9B5F5CB0 /* Pods-Ladder.debug.xcconfig */,
-				5A5929D2D57566F2F0E0200B /* Pods-Ladder.release.xcconfig */,
-				045AE401659F24A0DAD865B2 /* Pods-Ladder-PacketTunnel.debug.xcconfig */,
-				34FBF8A0C737A5676648021D /* Pods-Ladder-PacketTunnel.release.xcconfig */,
-				9CB38D230EFD4D8655CD6B02 /* Pods-PacketTunnel.debug.xcconfig */,
-				69E373F6ADD4CC82FAD29AB0 /* Pods-PacketTunnel.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -177,13 +157,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 04EA46172064C9B7002578AF /* Build configuration list for PBXNativeTarget "Ladder" */;
 			buildPhases = (
-				B28BD77C2CA3BE80EBC09949 /* [CP] Check Pods Manifest.lock */,
 				04EA46012064C9B7002578AF /* Sources */,
 				04EA46022064C9B7002578AF /* Frameworks */,
 				04EA46032064C9B7002578AF /* Resources */,
 				04EA462A2064CC41002578AF /* Embed App Extensions */,
-				B8A0C88A15197048F1283E8C /* [CP] Embed Pods Frameworks */,
-				BDFA486A0068042724569E52 /* [CP] Copy Pods Resources */,
+				0495EA582073D4C300320501 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -199,11 +177,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 04EA463C2064D10E002578AF /* Build configuration list for PBXNativeTarget "PacketTunnel" */;
 			buildPhases = (
-				0403213A25CF18932CC50E45 /* [CP] Check Pods Manifest.lock */,
 				04EA462F2064D10E002578AF /* Sources */,
 				04EA46302064D10E002578AF /* Frameworks */,
 				04EA46312064D10E002578AF /* Resources */,
-				EBF801F172A4EBC730D80ED8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -299,95 +275,31 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0403213A25CF18932CC50E45 /* [CP] Check Pods Manifest.lock */ = {
+		0495EA582073D4C300320501 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
+				"$(SRCROOT)/Carthage/Build/iOS/Eureka.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/KeychainAccess.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjack.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjackSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/lwip.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/MMDB.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/NEKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Sodium.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/tun2socks.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Yaml.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Resolver.framework",
 			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-PacketTunnel-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B28BD77C2CA3BE80EBC09949 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Ladder-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B8A0C88A15197048F1283E8C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Ladder/Pods-Ladder-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Eureka/Eureka.framework",
-				"${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework",
-				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
-				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Eureka.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainAccess.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Ladder/Pods-Ladder-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BDFA486A0068042724569E52 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Ladder/Pods-Ladder-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EBF801F172A4EBC730D80ED8 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PacketTunnel/Pods-PacketTunnel-resources.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -502,7 +414,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -556,7 +468,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -566,7 +478,6 @@
 		};
 		04EA46182064C9B7002578AF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4DF2758498417F8A9B5F5CB0 /* Pods-Ladder.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -574,15 +485,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7G847Y935F;
 				ENABLE_BITCODE = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = Ladder/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
+				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"-framework",
-					"\"KeychainAccess\"",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
+				INFOPLIST_FILE = Ladder/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.corestate.ladder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -592,7 +502,6 @@
 		};
 		04EA46192064C9B7002578AF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5A5929D2D57566F2F0E0200B /* Pods-Ladder.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -600,15 +509,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7G847Y935F;
 				ENABLE_BITCODE = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = Ladder/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
+				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"-framework",
-					"\"KeychainAccess\"",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
+				INFOPLIST_FILE = Ladder/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.corestate.ladder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -618,7 +526,6 @@
 		};
 		04EA463D2064D10E002578AF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9CB38D230EFD4D8655CD6B02 /* Pods-PacketTunnel.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -628,17 +535,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7G847Y935F;
 				ENABLE_BITCODE = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = PacketTunnel/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				OTHER_LDFLAGS = (
+				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"-framework",
-					"\"CocoaAsyncSocket\"",
-					"-framework",
-					"\"CryptoSwift\"",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
+				INFOPLIST_FILE = PacketTunnel/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.corestate.ladder.packet-tunnel";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -651,7 +555,6 @@
 		};
 		04EA463E2064D10E002578AF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 69E373F6ADD4CC82FAD29AB0 /* Pods-PacketTunnel.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -661,17 +564,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7G847Y935F;
 				ENABLE_BITCODE = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = PacketTunnel/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				OTHER_LDFLAGS = (
+				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"-framework",
-					"\"CocoaAsyncSocket\"",
-					"-framework",
-					"\"CryptoSwift\"",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
+				INFOPLIST_FILE = PacketTunnel/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.corestate.ladder.packet-tunnel";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

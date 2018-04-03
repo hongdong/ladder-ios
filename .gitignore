@@ -21,3 +21,6 @@ xcuserdata
 *.moved-aside
 *.xcuserstate
 Frameworks/
+
+# Carthage
+Carthage/

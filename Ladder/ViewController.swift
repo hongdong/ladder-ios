@@ -32,7 +32,7 @@ class ViewController: FormViewController {
 				row.tag = "PAC URL"
 				row.title = "URL"
 				row.placeholder = NSLocalizedString("Enter URL here", comment: "")
-				row.value = mainKeychain["pac_url"] ?? "https://aofei.org/pac"
+				row.value = mainKeychain["pac_url"] ?? "https://aofei.org/pac?proxies=SOCKS5+127.0.0.1%3A1081%3B+SOCKS+127.0.0.1%3A1081%3B+DIRECT%3B"
 				row.cell.textField.keyboardType = .URL
 				row.cell.textField.autocapitalizationType = .none
 			}
@@ -74,7 +74,7 @@ class ViewController: FormViewController {
 				row.cell.textField.keyboardType = .numberPad
 				row.cell.textField.autocapitalizationType = .none
 			}
-			<<< TextRow { row in
+			<<< PasswordRow { row in
 				row.tag = "Shadowsocks Password"
 				row.title = NSLocalizedString("Password", comment: "")
 				row.placeholder = NSLocalizedString("Enter password here", comment: "")
@@ -86,7 +86,7 @@ class ViewController: FormViewController {
 				row.tag = "Shadowsocks Method"
 				row.title = NSLocalizedString("Method", comment: "")
 				row.selectorTitle = NSLocalizedString("Shadowsocks Method", comment: "")
-				row.options = ["AES-256-CFB"]
+				row.options = ["AES-128-CFB", "AES-192-CFB", "AES-256-CFB", "ChaCha20", "Salsa20", "RC4MD5"]
 				row.value = mainKeychain["shadowsocks_method"] ?? "AES-256-CFB"
 				row.cell.detailTextLabel?.textColor = .black
 			}
@@ -154,7 +154,7 @@ class ViewController: FormViewController {
 					return
 				}
 
-				guard let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks Password") as? TextRow)?.value else {
+				guard let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks Password") as? PasswordRow)?.value else {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please enter a valid Shadowsocks password.", comment: ""),

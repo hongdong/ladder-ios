@@ -6,7 +6,7 @@
 //  Copyright © 2018 Beijing Corestate Technology Co., Ltd. All rights reserved.
 //
 
-import CryptoSwift
+import NEKit
 
 class Shadowsocks {
 	let serverAddress: String
@@ -15,7 +15,8 @@ class Shadowsocks {
 	let localPort: UInt16
 	let password: String
 	let method: String
-	let cipher: Cipher
+
+	private let socks5ProxyServer: GCDSOCKS5ProxyServer
 
 	init(serverAddress: String, serverPort: UInt16, localAddress: String, localPort: UInt16, password: String, method: String) {
 		self.serverAddress = serverAddress
@@ -25,35 +26,45 @@ class Shadowsocks {
 		self.password = password
 		self.method = method
 
+		socks5ProxyServer = GCDSOCKS5ProxyServer(address: IPAddress(fromString: localAddress), port: NEKit.Port(port: localPort))
+
+		let cryptoAlgorithm: CryptoAlgorithm
 		switch method {
-		default: // "AES-256-CFB"
-			var key = Data(count: 48)
-			let passwordData = password.data(using: String.Encoding.utf8)!
-			var passwordMD5Data = passwordData.md5()
-			var extendPasswordData = Data(count: passwordData.count + passwordMD5Data.count)
-			extendPasswordData.replaceSubrange(passwordMD5Data.count ..< extendPasswordData.count, with: passwordData)
-			var length = 0
-			repeat {
-				let copyLength = min(key.count - length, passwordMD5Data.count)
-				key.withUnsafeMutableBytes {
-					passwordMD5Data.copyBytes(to: $0.advanced(by: length), count: copyLength)
-				}
-				extendPasswordData.replaceSubrange(0 ..< passwordMD5Data.count, with: passwordMD5Data)
-				passwordMD5Data = extendPasswordData.md5()
-				length += copyLength
-			} while length < key.count
-			key = key.subdata(in: 0 ..< 32)
-			var iv = Data(count: 16)
-			for index in 0 ..< iv.count {
-				iv[index] = UInt8(arc4random_uniform(256))
-			}
-			cipher = try! AES(key: key.bytes, blockMode: .CFB(iv: iv.bytes))
+		case "AES-128-CFB":
+			cryptoAlgorithm = .AES128CFB
+		case "AES-192-CFB":
+			cryptoAlgorithm = .AES192CFB
+		case "ChaCha20":
+			cryptoAlgorithm = .CHACHA20
+		case "Salsa20":
+			cryptoAlgorithm = .SALSA20
+		case "RC4MD5":
+			cryptoAlgorithm = .RC4MD5
+		default:
+			cryptoAlgorithm = .AES256CFB
 		}
+
+		RuleManager.currentManager = RuleManager(
+			fromRules: [
+				AllRule(
+					adapterFactory: ShadowsocksAdapterFactory(
+						serverHost: serverAddress,
+						serverPort: Int(serverPort),
+						protocolObfuscaterFactory: ShadowsocksAdapter.ProtocolObfuscater.OriginProtocolObfuscater.Factory(),
+						cryptorFactory: ShadowsocksAdapter.CryptoStreamProcessor.Factory(password: password, algorithm: cryptoAlgorithm),
+						streamObfuscaterFactory: ShadowsocksAdapter.StreamObfuscater.OriginStreamObfuscater.Factory()
+					)
+				),
+			],
+			appendDirect: true
+		)
 	}
 
 	func start() throws {
+		try socks5ProxyServer.start()
 	}
 
 	func stop() {
+		socks5ProxyServer.stop()
 	}
 }
