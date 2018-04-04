@@ -6,6 +6,7 @@
 //  Copyright © 2018 Beijing Corestate Technology Co., Ltd. All rights reserved.
 //
 
+import CoreTelephony
 import Eureka
 import KeychainAccess
 import NetworkExtension
@@ -21,6 +22,11 @@ class ViewController: FormViewController {
 		navigationController?.navigationBar.tintColor = .white
 		navigationController?.navigationBar.barTintColor = UIColor(red: 80 / 255, green: 140 / 255, blue: 240 / 255, alpha: 1)
 		navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+
+		var notRestrictedCellularData = false
+		CTCellularData().cellularDataRestrictionDidUpdateNotifier = { state in
+			notRestrictedCellularData = state == .notRestricted
+		}
 
 		form
 			+++ Section { section in
@@ -99,6 +105,17 @@ class ViewController: FormViewController {
 				row.title = NSLocalizedString("Configure", comment: "")
 				row.cell.height = { 50 }
 			}.onCellSelection { _, _ in
+				if !notRestrictedCellularData {
+					let alertController = UIAlertController(
+						title: NSLocalizedString("Configuration Failed", comment: ""),
+						message: NSLocalizedString("Please allow Ladder to access your wireless data in the iPhone's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: ""),
+						preferredStyle: .alert
+					)
+					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
+					self.present(alertController, animated: true)
+					return
+				}
+
 				guard let pacURL = (self.form.rowBy(tag: "PAC URL") as? TextRow)?.value, URL(string: pacURL) != nil else {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),

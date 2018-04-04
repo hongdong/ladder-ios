@@ -32,6 +32,7 @@
 "Configuring..." = "Configuring...";
 "Configured!" = "Configured!";
 "Configuration Failed" = "Configuration Failed";
+"Please allow Ladder to access your wireless data in the iPhone's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\")." = "Please allow Ladder to access your wireless data in the iPhone's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").";
 "Please enter a valid PAC URL." = "Please enter a valid PAC URL.";
 "Please enter a valid Shadowsocks server address." = "Please enter a valid Shadowsocks server address.";
 "Please enter a valid Shadowsocks server port." = "Please enter a valid Shadowsocks server port.";
