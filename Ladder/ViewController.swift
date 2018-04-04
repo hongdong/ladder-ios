@@ -219,6 +219,14 @@ class ViewController: FormViewController {
 								self.mainKeychain["shadowsocks_local_port"] = String(stringInterpolationSegment: shadowsocksLocalPort)
 								self.mainKeychain["shadowsocks_password"] = shadowsocksPassword
 								self.mainKeychain["shadowsocks_method"] = shadowsocksMethod
+								providerManager.loadFromPreferences { error in
+									if error == nil {
+										providerManager.connection.stopVPNTunnel()
+										DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+											try? providerManager.connection.startVPNTunnel()
+										}
+									}
+								}
 							}
 							configuringAlertController.dismiss(animated: true) {
 								let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
