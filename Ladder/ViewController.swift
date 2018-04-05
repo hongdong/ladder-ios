@@ -18,6 +18,7 @@ class ViewController: FormViewController {
 		super.viewDidLoad()
 
 		navigationItem.title = NSLocalizedString("Ladder", comment: "")
+		navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Icons/Info"), style: .plain, target: self, action: #selector(openInfo))
 		navigationController?.navigationBar.barStyle = .black
 		navigationController?.navigationBar.tintColor = .white
 		navigationController?.navigationBar.barTintColor = UIColor(red: 80 / 255, green: 140 / 255, blue: 240 / 255, alpha: 1)
@@ -92,7 +93,7 @@ class ViewController: FormViewController {
 				row.tag = "Shadowsocks Method"
 				row.title = NSLocalizedString("Method", comment: "")
 				row.selectorTitle = NSLocalizedString("Shadowsocks Method", comment: "")
-				row.options = ["AES-128-CFB", "AES-192-CFB", "AES-256-CFB", "ChaCha20", "Salsa20", "RC4MD5"]
+				row.options = ["AES-128-CFB", "AES-192-CFB", "AES-256-CFB", "ChaCha20", "Salsa20", "RC4-MD5"]
 				row.value = mainKeychain["shadowsocks_method"] ?? "AES-256-CFB"
 				row.cell.detailTextLabel?.textColor = .black
 			}
@@ -266,5 +267,9 @@ class ViewController: FormViewController {
 					}
 				}
 			}
+	}
+
+	@objc func openInfo() {
+		UIApplication.shared.openURL(URL(string: "https://aofei.org/posts/2018-04-05-immersive-wallless-experience")!)
 	}
 }

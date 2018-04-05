@@ -38,7 +38,7 @@ class Shadowsocks {
 			cryptoAlgorithm = .CHACHA20
 		case "Salsa20":
 			cryptoAlgorithm = .SALSA20
-		case "RC4MD5":
+		case "RC4-MD5":
 			cryptoAlgorithm = .RC4MD5
 		default:
 			cryptoAlgorithm = .AES256CFB
