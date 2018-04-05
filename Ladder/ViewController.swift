@@ -14,6 +14,9 @@ import NetworkExtension
 class ViewController: FormViewController {
 	let mainKeychain = Keychain(service: Bundle.main.bundleIdentifier!)
 
+	var notRestrictedCellularData = false
+	var restrictedCellularDataAlertTimes = 0
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -24,9 +27,8 @@ class ViewController: FormViewController {
 		navigationController?.navigationBar.barTintColor = UIColor(red: 80 / 255, green: 140 / 255, blue: 240 / 255, alpha: 1)
 		navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
 
-		var notRestrictedCellularData = false
 		CTCellularData().cellularDataRestrictionDidUpdateNotifier = { state in
-			notRestrictedCellularData = state == .notRestricted
+			self.notRestrictedCellularData = state == .notRestricted
 		}
 
 		form
@@ -106,12 +108,18 @@ class ViewController: FormViewController {
 				row.title = NSLocalizedString("Configure", comment: "")
 				row.cell.height = { 50 }
 			}.onCellSelection { _, _ in
-				if !notRestrictedCellularData {
+				if !self.notRestrictedCellularData {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please allow Ladder to access your wireless data in the iPhone's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: ""),
+						message: nil,
 						preferredStyle: .alert
 					)
+					if self.restrictedCellularDataAlertTimes < 2 {
+						alertController.message = NSLocalizedString("Please allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: "")
+						self.restrictedCellularDataAlertTimes += 1
+					} else {
+						alertController.message = NSLocalizedString("You must restart your device so that Ladder can access your wireless data if you are in the China network and have Ladder installed for the very first time.", comment: "")
+					}
 					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
 					self.present(alertController, animated: true)
 					return
