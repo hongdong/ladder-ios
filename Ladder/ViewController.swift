@@ -6,15 +6,13 @@
 //  Copyright © 2018 Aofei Sheng. All rights reserved.
 //
 
-import CoreTelephony
 import Eureka
 import KeychainAccess
 import NetworkExtension
+import Reachability
 
 class ViewController: FormViewController {
 	let mainKeychain = Keychain(service: Bundle.main.bundleIdentifier!)
-
-	var notRestrictedCellularData = false
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -25,10 +23,6 @@ class ViewController: FormViewController {
 		navigationController?.navigationBar.tintColor = .white
 		navigationController?.navigationBar.barTintColor = UIColor(red: 80 / 255, green: 140 / 255, blue: 240 / 255, alpha: 1)
 		navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
-
-		CTCellularData().cellularDataRestrictionDidUpdateNotifier = { state in
-			self.notRestrictedCellularData = state == .notRestricted
-		}
 
 		form
 			+++ Section { section in
@@ -107,10 +101,10 @@ class ViewController: FormViewController {
 				row.title = NSLocalizedString("Configure", comment: "")
 				row.cell.height = { 50 }
 			}.onCellSelection { _, _ in
-				if !self.notRestrictedCellularData {
+				if Reachability(hostname: "aofei.org")?.connection == .none {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: ""),
+						message: NSLocalizedString("Please check your network settings and allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: ""),
 						preferredStyle: .alert
 					)
 					if let openSettingsURL = URL(string: UIApplicationOpenSettingsURLString) {
