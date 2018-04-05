@@ -10,6 +10,7 @@
 
 "OK" = "好";
 "Cancel" = "取消";
+"Settings" = "设置";
 
 "PAC" = "代理自动配置";
 "Enter URL here" = "在这里输入 URL";
@@ -33,7 +34,6 @@
 "Configured!" = "已配置！";
 "Configuration Failed" = "配置失败";
 "Please allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\")." = "请在系统的“设置-蜂窝移动网络”选项中，允许梯子访问您的无线数据（记住勾选“WLAN 与蜂窝移动网”）。";
-"You must restart your device so that Ladder can access your wireless data if you are in the China network and have Ladder installed for the very first time." = "如果您是处在中国的网络中并且是第一次安装梯子，那么您必须重启您的设备，这样梯子才能访问您的无线数据。";
 "Please enter a valid PAC URL." = "请输入一个有效的代理自动配置 URL。";
 "Please enter a valid Shadowsocks server address." = "请输入一个有效的影梭服务器地址。";
 "Please enter a valid Shadowsocks server port." = "请输入一个有效的影梭服务器端口。";

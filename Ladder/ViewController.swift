@@ -15,7 +15,6 @@ class ViewController: FormViewController {
 	let mainKeychain = Keychain(service: Bundle.main.bundleIdentifier!)
 
 	var notRestrictedCellularData = false
-	var restrictedCellularDataAlertTimes = 0
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -111,14 +110,17 @@ class ViewController: FormViewController {
 				if !self.notRestrictedCellularData {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: nil,
+						message: NSLocalizedString("Please allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: ""),
 						preferredStyle: .alert
 					)
-					if self.restrictedCellularDataAlertTimes < 2 {
-						alertController.message = NSLocalizedString("Please allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: "")
-						self.restrictedCellularDataAlertTimes += 1
-					} else {
-						alertController.message = NSLocalizedString("You must restart your device so that Ladder can access your wireless data if you are in the China network and have Ladder installed for the very first time.", comment: "")
+					if let openSettingsURL = URL(string: UIApplicationOpenSettingsURLString) {
+						alertController.addAction(UIAlertAction(
+							title: NSLocalizedString("Settings", comment: ""),
+							style: .default,
+							handler: { _ in
+								UIApplication.shared.openURL(openSettingsURL)
+							}
+						))
 					}
 					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
 					self.present(alertController, animated: true)
