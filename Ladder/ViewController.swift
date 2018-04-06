@@ -25,27 +25,28 @@ class ViewController: FormViewController {
 		navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
 
 		form
-			+++ Section { section in
-				section.tag = "PAC"
-				section.header = HeaderFooterView(title: NSLocalizedString("PAC", comment: ""))
-				section.header?.height = { 33 }
+			+++ Section(NSLocalizedString("General", comment: "")) { section in
+				section.tag = "General"
+			}
+			<<< SwitchRow { row in
+				row.tag = "General - Hide VPN Icon"
+				row.title = NSLocalizedString("Hide VPN Icon", comment: "")
+				row.value = mainKeychain["general_hide_vpn_icon"] == "true"
 			}
 			<<< TextRow { row in
-				row.tag = "PAC URL"
-				row.title = "URL"
-				row.placeholder = NSLocalizedString("Enter URL here", comment: "")
-				row.value = mainKeychain["pac_url"] ?? "https://aofei.org/pac?proxies=SOCKS5+127.0.0.1%3A1081%3B+SOCKS+127.0.0.1%3A1081%3B+DIRECT%3B"
+				row.tag = "General - PAC URL"
+				row.title = "PAC URL"
+				row.placeholder = NSLocalizedString("Enter PAC URL here", comment: "")
+				row.value = mainKeychain["general_pac_url"] ?? "https://aofei.org/pac?proxies=SOCKS5+127.0.0.1%3A1081%3B+SOCKS+127.0.0.1%3A1081%3B+DIRECT%3B"
 				row.cell.textField.keyboardType = .URL
 				row.cell.textField.autocapitalizationType = .none
 			}
 
-			+++ Section { section in
+			+++ Section(NSLocalizedString("Shadowsocks", comment: "")) { section in
 				section.tag = "Shadowsocks"
-				section.header = HeaderFooterView(title: NSLocalizedString("Shadowsocks", comment: ""))
-				section.header?.height = { 15 }
 			}
 			<<< TextRow { row in
-				row.tag = "Shadowsocks Server Address"
+				row.tag = "Shadowsocks - Server Address"
 				row.title = NSLocalizedString("Server Address", comment: "")
 				row.placeholder = NSLocalizedString("Enter server address here", comment: "")
 				row.value = mainKeychain["shadowsocks_server_address"]
@@ -53,7 +54,7 @@ class ViewController: FormViewController {
 				row.cell.textField.autocapitalizationType = .none
 			}
 			<<< TextRow { row in
-				row.tag = "Shadowsocks Server Port"
+				row.tag = "Shadowsocks - Server Port"
 				row.title = NSLocalizedString("Server Port", comment: "")
 				row.placeholder = NSLocalizedString("Enter server port here", comment: "")
 				row.value = mainKeychain["shadowsocks_server_port"]
@@ -61,7 +62,7 @@ class ViewController: FormViewController {
 				row.cell.textField.autocapitalizationType = .none
 			}
 			<<< TextRow { row in
-				row.tag = "Shadowsocks Local Address"
+				row.tag = "Shadowsocks - Local Address"
 				row.title = NSLocalizedString("Local Address", comment: "")
 				row.placeholder = NSLocalizedString("Enter local address here", comment: "")
 				row.value = mainKeychain["shadowsocks_local_address"] ?? "127.0.0.1"
@@ -69,7 +70,7 @@ class ViewController: FormViewController {
 				row.cell.textField.autocapitalizationType = .none
 			}
 			<<< TextRow { row in
-				row.tag = "Shadowsocks Local Port"
+				row.tag = "Shadowsocks - Local Port"
 				row.title = NSLocalizedString("Local Port", comment: "")
 				row.placeholder = NSLocalizedString("Enter local port here", comment: "")
 				row.value = mainKeychain["shadowsocks_local_port"] ?? "1081"
@@ -77,7 +78,7 @@ class ViewController: FormViewController {
 				row.cell.textField.autocapitalizationType = .none
 			}
 			<<< PasswordRow { row in
-				row.tag = "Shadowsocks Password"
+				row.tag = "Shadowsocks - Password"
 				row.title = NSLocalizedString("Password", comment: "")
 				row.placeholder = NSLocalizedString("Enter password here", comment: "")
 				row.value = mainKeychain["shadowsocks_password"]
@@ -85,7 +86,7 @@ class ViewController: FormViewController {
 				row.cell.textField.autocapitalizationType = .none
 			}
 			<<< ActionSheetRow<String> { row in
-				row.tag = "Shadowsocks Method"
+				row.tag = "Shadowsocks - Method"
 				row.title = NSLocalizedString("Method", comment: "")
 				row.selectorTitle = NSLocalizedString("Shadowsocks Method", comment: "")
 				row.options = ["AES-128-CFB", "AES-192-CFB", "AES-256-CFB", "ChaCha20", "Salsa20", "RC4-MD5"]
@@ -94,10 +95,10 @@ class ViewController: FormViewController {
 			}
 
 			+++ Section { section in
-				section.header = HeaderFooterView(title: "")
-				section.header?.height = { 15 }
+				section.tag = "Configure"
 			}
 			<<< ButtonRow { row in
+				row.tag = "Configure - Configure"
 				row.title = NSLocalizedString("Configure", comment: "")
 				row.cell.height = { 50 }
 			}.onCellSelection { _, _ in
@@ -121,7 +122,18 @@ class ViewController: FormViewController {
 					return
 				}
 
-				guard let pacURL = (self.form.rowBy(tag: "PAC URL") as? TextRow)?.value, URL(string: pacURL) != nil else {
+				guard let generalHideVPNIcon = (self.form.rowBy(tag: "General - Hide VPN Icon") as? SwitchRow)?.value else {
+					let alertController = UIAlertController(
+						title: NSLocalizedString("Configuration Failed", comment: ""),
+						message: NSLocalizedString("Please switch a valid VPN hide icon.", comment: ""),
+						preferredStyle: .alert
+					)
+					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
+					self.present(alertController, animated: true)
+					return
+				}
+
+				guard let generalPACURL = (self.form.rowBy(tag: "General - PAC URL") as? TextRow)?.value, URL(string: generalPACURL) != nil else {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please enter a valid PAC URL.", comment: ""),
@@ -132,7 +144,7 @@ class ViewController: FormViewController {
 					return
 				}
 
-				guard let shadowsocksServerAddress = (self.form.rowBy(tag: "Shadowsocks Server Address") as? TextRow)?.value else {
+				guard let shadowsocksServerAddress = (self.form.rowBy(tag: "Shadowsocks - Server Address") as? TextRow)?.value else {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please enter a valid Shadowsocks server address.", comment: ""),
@@ -143,7 +155,7 @@ class ViewController: FormViewController {
 					return
 				}
 
-				guard let shadowsocksServerPort = UInt16((self.form.rowBy(tag: "Shadowsocks Server Port") as? TextRow)?.value ?? "") else {
+				guard let shadowsocksServerPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Server Port") as? TextRow)?.value ?? "") else {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please enter a valid Shadowsocks server port.", comment: ""),
@@ -154,7 +166,7 @@ class ViewController: FormViewController {
 					return
 				}
 
-				guard let shadowsocksLocalAddress = (self.form.rowBy(tag: "Shadowsocks Local Address") as? TextRow)?.value else {
+				guard let shadowsocksLocalAddress = (self.form.rowBy(tag: "Shadowsocks - Local Address") as? TextRow)?.value else {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please enter a valid Shadowsocks local address.", comment: ""),
@@ -165,7 +177,7 @@ class ViewController: FormViewController {
 					return
 				}
 
-				guard let shadowsocksLocalPort = UInt16((self.form.rowBy(tag: "Shadowsocks Local Port") as? TextRow)?.value ?? "") else {
+				guard let shadowsocksLocalPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Local Port") as? TextRow)?.value ?? "") else {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please enter a valid Shadowsocks local port.", comment: ""),
@@ -176,7 +188,7 @@ class ViewController: FormViewController {
 					return
 				}
 
-				guard let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks Password") as? PasswordRow)?.value else {
+				guard let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks - Password") as? PasswordRow)?.value else {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please enter a valid Shadowsocks password.", comment: ""),
@@ -187,7 +199,7 @@ class ViewController: FormViewController {
 					return
 				}
 
-				guard let shadowsocksMethod = (self.form.rowBy(tag: "Shadowsocks Method") as? ActionSheetRow<String>)?.value else {
+				guard let shadowsocksMethod = (self.form.rowBy(tag: "Shadowsocks - Method") as? ActionSheetRow<String>)?.value else {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please select a valid Shadowsocks method.", comment: ""),
@@ -220,7 +232,8 @@ class ViewController: FormViewController {
 						let providerConfiguration = NETunnelProviderProtocol()
 						providerConfiguration.serverAddress = "Ladder"
 						providerConfiguration.providerConfiguration = [
-							"pac_url": pacURL,
+							"general_hide_vpn_icon": generalHideVPNIcon,
+							"general_pac_url": generalPACURL,
 							"shadowsocks_server_address": shadowsocksServerAddress,
 							"shadowsocks_server_port": shadowsocksServerPort,
 							"shadowsocks_local_address": shadowsocksLocalAddress,
@@ -234,7 +247,8 @@ class ViewController: FormViewController {
 						providerManager.isEnabled = true
 						providerManager.saveToPreferences { error in
 							if error == nil {
-								self.mainKeychain["pac_url"] = pacURL
+								self.mainKeychain["general_hide_vpn_icon"] = generalHideVPNIcon ? "true" : "false"
+								self.mainKeychain["general_pac_url"] = generalPACURL
 								self.mainKeychain["shadowsocks_server_address"] = shadowsocksServerAddress
 								self.mainKeychain["shadowsocks_server_port"] = String(stringInterpolationSegment: shadowsocksServerPort)
 								self.mainKeychain["shadowsocks_local_address"] = shadowsocksLocalAddress

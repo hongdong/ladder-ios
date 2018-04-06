@@ -13,7 +13,8 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
 	override func startTunnel(options _: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
 		guard let providerConfiguration = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
-			let pacURL = providerConfiguration["pac_url"] as? String,
+			let generalHideVPNIcon = providerConfiguration["general_hide_vpn_icon"] as? Bool,
+			let generalPACURL = providerConfiguration["general_pac_url"] as? String,
 			let shadowsocksServerAddress = providerConfiguration["shadowsocks_server_address"] as? String,
 			let shadowsocksServerPort = providerConfiguration["shadowsocks_server_port"] as? UInt16,
 			let shadowsocksLocalAddress = providerConfiguration["shadowsocks_local_address"] as? String,
@@ -35,13 +36,13 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
 		let proxySettings = NEProxySettings()
 		proxySettings.autoProxyConfigurationEnabled = true
-		proxySettings.proxyAutoConfigurationURL = URL(string: pacURL)
+		proxySettings.proxyAutoConfigurationURL = URL(string: generalPACURL)
 		proxySettings.excludeSimpleHostnames = true
 		proxySettings.matchDomains = [""]
 
 		let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "8.8.8.8")
 		networkSettings.proxySettings = proxySettings
-		networkSettings.ipv4Settings = NEIPv4Settings(addresses: ["10.0.0.1"], subnetMasks: ["255.255.255.0"])
+		networkSettings.ipv4Settings = NEIPv4Settings(addresses: [generalHideVPNIcon ? "0.0.0.0" : "10.0.0.1"], subnetMasks: ["255.255.255.0"])
 		networkSettings.mtu = 1500
 
 		setTunnelNetworkSettings(networkSettings) { error in
