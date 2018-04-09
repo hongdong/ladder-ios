@@ -33,13 +33,14 @@ class ViewController: FormViewController {
 				row.title = NSLocalizedString("Hide VPN Icon", comment: "")
 				row.value = mainKeychain["general_hide_vpn_icon"] == "true"
 			}
-			<<< TextRow { row in
+			<<< URLRow { row in
 				row.tag = "General - PAC URL"
 				row.title = "PAC URL"
 				row.placeholder = NSLocalizedString("Enter PAC URL here", comment: "")
-				row.value = mainKeychain["general_pac_url"] ?? "https://aofei.org/pac?proxies=SOCKS5+127.0.0.1%3A1081%3B+SOCKS+127.0.0.1%3A1081%3B+DIRECT%3B"
-				row.cell.textField.keyboardType = .URL
-				row.cell.textField.autocapitalizationType = .none
+				row.value = URL(string: mainKeychain["general_pac_url"] ?? "https://aofei.org/pac?proxies=SOCKS5+127.0.0.1%3A1081%3B+SOCKS+127.0.0.1%3A1081%3B+DIRECT%3B")
+
+				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a PAC URL.", comment: "")))
+				row.add(rule: RuleURL(allowsEmpty: false, requiresProtocol: true, msg: NSLocalizedString("Please enter a valid PAC URL.", comment: "")))
 			}
 
 			+++ Section(NSLocalizedString("Shadowsocks", comment: "")) { section in
@@ -52,14 +53,21 @@ class ViewController: FormViewController {
 				row.value = mainKeychain["shadowsocks_server_address"]
 				row.cell.textField.keyboardType = .asciiCapable
 				row.cell.textField.autocapitalizationType = .none
+
+				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a Shadowsocks server address.", comment: "")))
 			}
-			<<< TextRow { row in
+			<<< IntRow { row in
 				row.tag = "Shadowsocks - Server Port"
 				row.title = NSLocalizedString("Server Port", comment: "")
 				row.placeholder = NSLocalizedString("Enter server port here", comment: "")
-				row.value = mainKeychain["shadowsocks_server_port"]
-				row.cell.textField.keyboardType = .numberPad
-				row.cell.textField.autocapitalizationType = .none
+				if let shadowsocksServerPort = mainKeychain["shadowsocks_server_port"] {
+					row.value = Int(shadowsocksServerPort)
+				}
+				row.formatter = NumberFormatter()
+
+				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a Shadowsocks server port.", comment: "")))
+				row.add(rule: RuleGreaterOrEqualThan(min: 0, msg: NSLocalizedString("Shadowsocks server port must greater than or equal to 0.", comment: "")))
+				row.add(rule: RuleSmallerOrEqualThan(max: 65535, msg: NSLocalizedString("Shadowsocks server port must smaller than or equal to 65535.", comment: "")))
 			}
 			<<< TextRow { row in
 				row.tag = "Shadowsocks - Local Address"
@@ -68,22 +76,27 @@ class ViewController: FormViewController {
 				row.value = mainKeychain["shadowsocks_local_address"] ?? "127.0.0.1"
 				row.cell.textField.keyboardType = .asciiCapable
 				row.cell.textField.autocapitalizationType = .none
+
+				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a Shadowsocks local address.", comment: "")))
 			}
-			<<< TextRow { row in
+			<<< IntRow { row in
 				row.tag = "Shadowsocks - Local Port"
 				row.title = NSLocalizedString("Local Port", comment: "")
 				row.placeholder = NSLocalizedString("Enter local port here", comment: "")
-				row.value = mainKeychain["shadowsocks_local_port"] ?? "1081"
-				row.cell.textField.keyboardType = .numberPad
-				row.cell.textField.autocapitalizationType = .none
+				row.value = Int(mainKeychain["shadowsocks_local_port"] ?? "1081")
+				row.formatter = NumberFormatter()
+
+				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a Shadowsocks local port.", comment: "")))
+				row.add(rule: RuleGreaterOrEqualThan(min: 0, msg: NSLocalizedString("Shadowsocks local port must greater than or equal to 0.", comment: "")))
+				row.add(rule: RuleSmallerOrEqualThan(max: 65535, msg: NSLocalizedString("Shadowsocks local port must smaller than or equal to 65535.", comment: "")))
 			}
 			<<< PasswordRow { row in
 				row.tag = "Shadowsocks - Password"
 				row.title = NSLocalizedString("Password", comment: "")
 				row.placeholder = NSLocalizedString("Enter password here", comment: "")
 				row.value = mainKeychain["shadowsocks_password"]
-				row.cell.textField.keyboardType = .asciiCapable
-				row.cell.textField.autocapitalizationType = .none
+
+				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a Shadowsocks password.", comment: "")))
 			}
 			<<< ActionSheetRow<String> { row in
 				row.tag = "Shadowsocks - Method"
@@ -102,7 +115,14 @@ class ViewController: FormViewController {
 				row.title = NSLocalizedString("Configure", comment: "")
 				row.cell.height = { 50 }
 			}.onCellSelection { _, _ in
-				if Reachability(hostname: "aofei.org")?.connection == .none {
+				let configuringAlertController = UIAlertController(
+					title: NSLocalizedString("Configuring...", comment: ""),
+					message: nil,
+					preferredStyle: .alert
+				)
+				self.present(configuringAlertController, animated: true)
+
+				if Reachability()!.connection == .none {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please check your network settings and allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: ""),
@@ -118,166 +138,91 @@ class ViewController: FormViewController {
 						))
 					}
 					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-					self.present(alertController, animated: true)
+					configuringAlertController.dismiss(animated: true) {
+						self.present(alertController, animated: true)
+					}
 					return
-				}
-
-				guard let generalHideVPNIcon = (self.form.rowBy(tag: "General - Hide VPN Icon") as? SwitchRow)?.value else {
+				} else if let firstValidationError = self.form.validate().first {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please switch a valid VPN hide icon.", comment: ""),
+						message: firstValidationError.msg,
 						preferredStyle: .alert
 					)
 					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-					self.present(alertController, animated: true)
-					return
-				}
-
-				guard let generalPACURL = (self.form.rowBy(tag: "General - PAC URL") as? TextRow)?.value, URL(string: generalPACURL) != nil else {
-					let alertController = UIAlertController(
-						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please enter a valid PAC URL.", comment: ""),
-						preferredStyle: .alert
-					)
-					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-					self.present(alertController, animated: true)
-					return
-				}
-
-				guard let shadowsocksServerAddress = (self.form.rowBy(tag: "Shadowsocks - Server Address") as? TextRow)?.value else {
-					let alertController = UIAlertController(
-						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please enter a valid Shadowsocks server address.", comment: ""),
-						preferredStyle: .alert
-					)
-					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-					self.present(alertController, animated: true)
-					return
-				}
-
-				guard let shadowsocksServerPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Server Port") as? TextRow)?.value ?? "") else {
-					let alertController = UIAlertController(
-						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please enter a valid Shadowsocks server port.", comment: ""),
-						preferredStyle: .alert
-					)
-					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-					self.present(alertController, animated: true)
-					return
-				}
-
-				guard let shadowsocksLocalAddress = (self.form.rowBy(tag: "Shadowsocks - Local Address") as? TextRow)?.value else {
-					let alertController = UIAlertController(
-						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please enter a valid Shadowsocks local address.", comment: ""),
-						preferredStyle: .alert
-					)
-					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-					self.present(alertController, animated: true)
-					return
-				}
-
-				guard let shadowsocksLocalPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Local Port") as? TextRow)?.value ?? "") else {
-					let alertController = UIAlertController(
-						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please enter a valid Shadowsocks local port.", comment: ""),
-						preferredStyle: .alert
-					)
-					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-					self.present(alertController, animated: true)
-					return
-				}
-
-				guard let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks - Password") as? PasswordRow)?.value else {
-					let alertController = UIAlertController(
-						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please enter a valid Shadowsocks password.", comment: ""),
-						preferredStyle: .alert
-					)
-					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-					self.present(alertController, animated: true)
-					return
-				}
-
-				guard let shadowsocksMethod = (self.form.rowBy(tag: "Shadowsocks - Method") as? ActionSheetRow<String>)?.value else {
-					let alertController = UIAlertController(
-						title: NSLocalizedString("Configuration Failed", comment: ""),
-						message: NSLocalizedString("Please select a valid Shadowsocks method.", comment: ""),
-						preferredStyle: .alert
-					)
-					alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-					self.present(alertController, animated: true)
+					configuringAlertController.dismiss(animated: true) {
+						self.present(alertController, animated: true)
+					}
 					return
 				}
 
 				NETunnelProviderManager.loadAllFromPreferences { providerManagers, _ in
-					if let providerManagers = providerManagers {
-						let configuringAlertController = UIAlertController(
-							title: NSLocalizedString("Configuring...", comment: ""),
-							message: nil,
-							preferredStyle: .alert
-						)
-						self.present(configuringAlertController, animated: true)
-
-						var providerManager = NETunnelProviderManager()
-						if providerManagers.count > 0 {
-							providerManager = providerManagers[0]
-							if providerManagers.count > 1 {
-								for index in 1 ..< providerManagers.count {
-									providerManagers[index].removeFromPreferences()
-								}
+					var providerManager = NETunnelProviderManager()
+					if let providerManagers = providerManagers, providerManagers.count > 0 {
+						providerManager = providerManagers[0]
+						if providerManagers.count > 1 {
+							for index in 1 ..< providerManagers.count {
+								providerManagers[index].removeFromPreferences()
 							}
 						}
+					}
 
-						let providerConfiguration = NETunnelProviderProtocol()
-						providerConfiguration.serverAddress = "Ladder"
-						providerConfiguration.providerConfiguration = [
-							"general_hide_vpn_icon": generalHideVPNIcon,
-							"general_pac_url": generalPACURL,
-							"shadowsocks_server_address": shadowsocksServerAddress,
-							"shadowsocks_server_port": shadowsocksServerPort,
-							"shadowsocks_local_address": shadowsocksLocalAddress,
-							"shadowsocks_local_port": shadowsocksLocalPort,
-							"shadowsocks_password": shadowsocksPassword,
-							"shadowsocks_method": shadowsocksMethod,
-						]
+					let generalHideVPNIcon = (self.form.rowBy(tag: "General - Hide VPN Icon") as! SwitchRow).value!
+					let generalPACURL = (self.form.rowBy(tag: "General - PAC URL") as! URLRow).value!
+					let shadowsocksServerAddress = (self.form.rowBy(tag: "Shadowsocks - Server Address") as! TextRow).value!
+					let shadowsocksServerPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Server Port") as! IntRow).value!)
+					let shadowsocksLocalAddress = (self.form.rowBy(tag: "Shadowsocks - Local Address") as! TextRow).value!
+					let shadowsocksLocalPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Local Port") as! IntRow).value!)
+					let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks - Password") as! PasswordRow).value!
+					let shadowsocksMethod = (self.form.rowBy(tag: "Shadowsocks - Method") as! ActionSheetRow<String>).value!
 
-						providerManager.localizedDescription = NSLocalizedString("Ladder", comment: "")
-						providerManager.protocolConfiguration = providerConfiguration
-						providerManager.isEnabled = true
-						providerManager.saveToPreferences { error in
-							if error == nil {
-								self.mainKeychain["general_hide_vpn_icon"] = generalHideVPNIcon ? "true" : "false"
-								self.mainKeychain["general_pac_url"] = generalPACURL
-								self.mainKeychain["shadowsocks_server_address"] = shadowsocksServerAddress
-								self.mainKeychain["shadowsocks_server_port"] = String(stringInterpolationSegment: shadowsocksServerPort)
-								self.mainKeychain["shadowsocks_local_address"] = shadowsocksLocalAddress
-								self.mainKeychain["shadowsocks_local_port"] = String(stringInterpolationSegment: shadowsocksLocalPort)
-								self.mainKeychain["shadowsocks_password"] = shadowsocksPassword
-								self.mainKeychain["shadowsocks_method"] = shadowsocksMethod
-								providerManager.loadFromPreferences { error in
-									if error == nil {
-										providerManager.connection.stopVPNTunnel()
-										DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-											try? providerManager.connection.startVPNTunnel()
-										}
+					let providerConfiguration = NETunnelProviderProtocol()
+					providerConfiguration.serverAddress = "Ladder"
+					providerConfiguration.providerConfiguration = [
+						"general_hide_vpn_icon": generalHideVPNIcon,
+						"general_pac_url": generalPACURL.absoluteString,
+						"shadowsocks_server_address": shadowsocksServerAddress,
+						"shadowsocks_server_port": shadowsocksServerPort,
+						"shadowsocks_local_address": shadowsocksLocalAddress,
+						"shadowsocks_local_port": shadowsocksLocalPort,
+						"shadowsocks_password": shadowsocksPassword,
+						"shadowsocks_method": shadowsocksMethod,
+					]
+
+					providerManager.localizedDescription = NSLocalizedString("Ladder", comment: "")
+					providerManager.protocolConfiguration = providerConfiguration
+					providerManager.isEnabled = true
+					providerManager.saveToPreferences { error in
+						if error == nil {
+							self.mainKeychain["general_hide_vpn_icon"] = generalHideVPNIcon ? "true" : "false"
+							self.mainKeychain["general_pac_url"] = generalPACURL.absoluteString
+							self.mainKeychain["shadowsocks_server_address"] = shadowsocksServerAddress
+							self.mainKeychain["shadowsocks_server_port"] = String(stringInterpolationSegment: shadowsocksServerPort)
+							self.mainKeychain["shadowsocks_local_address"] = shadowsocksLocalAddress
+							self.mainKeychain["shadowsocks_local_port"] = String(stringInterpolationSegment: shadowsocksLocalPort)
+							self.mainKeychain["shadowsocks_password"] = shadowsocksPassword
+							self.mainKeychain["shadowsocks_method"] = shadowsocksMethod
+							providerManager.loadFromPreferences { error in
+								if error == nil {
+									providerManager.connection.stopVPNTunnel()
+									DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+										try? providerManager.connection.startVPNTunnel()
 									}
 								}
 							}
-							configuringAlertController.dismiss(animated: true) {
-								let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-								if error != nil {
-									alertController.title = NSLocalizedString("Configuration Failed", comment: "")
-									alertController.message = NSLocalizedString("Please try again.", comment: "")
-									alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-								} else {
-									alertController.title = NSLocalizedString("Configured!", comment: "")
-								}
-								self.present(alertController, animated: true) {
-									if error == nil {
-										DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-											alertController.dismiss(animated: true)
-										}
+						}
+						configuringAlertController.dismiss(animated: true) {
+							let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+							if error != nil {
+								alertController.title = NSLocalizedString("Configuration Failed", comment: "")
+								alertController.message = NSLocalizedString("Please try again.", comment: "")
+								alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
+							} else {
+								alertController.title = NSLocalizedString("Configured!", comment: "")
+							}
+							self.present(alertController, animated: true) {
+								if error == nil {
+									DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+										alertController.dismiss(animated: true)
 									}
 								}
 							}

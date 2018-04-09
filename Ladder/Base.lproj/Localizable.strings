@@ -15,18 +15,29 @@
 "General" = "General";
 "Hide VPN Icon" = "Hide VPN Icon";
 "Enter PAC URL here" = "Enter PAC URL here";
+"Please enter a PAC URL." = "Please enter a PAC URL.";
+"Please enter a valid PAC URL." = "Please enter a valid PAC URL.";
 
 "Shadowsocks" = "Shadowsocks";
 "Server Address" = "Server Address";
 "Enter server address here" = "Enter server address here";
+"Please enter a Shadowsocks server address." = "Please enter a Shadowsocks server address.";
 "Server Port" = "Server Port";
 "Enter server port here" = "Enter server port here";
+"Please enter a Shadowsocks server port." = "Please enter a Shadowsocks server port.";
+"Shadowsocks server port must greater than or equal to 0." = "Shadowsocks server port must greater than or equal to 0.";
+"Shadowsocks server port must smaller than or equal to 65535." = "Shadowsocks server port must smaller than or equal to 65535.";
 "Local Address" = "Local Address";
 "Enter local address here" = "Enter local address here";
+"Please enter a Shadowsocks local address." = "Please enter a Shadowsocks local address.";
 "Local Port" = "Local Port";
 "Enter local port here" = "Enter local port here";
+"Please enter a Shadowsocks local port." = "Please enter a Shadowsocks local port.";
+"Shadowsocks local port must greater than or equal to 0." = "Shadowsocks local port must greater than or equal to 0.";
+"Shadowsocks local port must smaller than or equal to 65535." = "Shadowsocks local port must smaller than or equal to 65535.";
 "Password" = "Password";
 "Enter password here" = "Enter password here";
+"Please enter a Shadowsocks password." = "Please enter a Shadowsocks password.";
 "Method" = "Method";
 "Shadowsocks Method" = "Shadowsocks Method";
 
@@ -35,12 +46,4 @@
 "Configured!" = "Configured!";
 "Configuration Failed" = "Configuration Failed";
 "Please check your network settings and allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\")." = "Please check your network settings and allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").";
-"Please switch a valid VPN hide icon." = "Please switch a valid VPN hide icon.";
-"Please enter a valid PAC URL." = "Please enter a valid PAC URL.";
-"Please enter a valid Shadowsocks server address." = "Please enter a valid Shadowsocks server address.";
-"Please enter a valid Shadowsocks server port." = "Please enter a valid Shadowsocks server port.";
-"Please enter a valid Shadowsocks local address." = "Please enter a valid Shadowsocks local address.";
-"Please enter a valid Shadowsocks local port." = "Please enter a valid Shadowsocks local port.";
-"Please enter a valid Shadowsocks password." = "Please enter a valid Shadowsocks password.";
-"Please select a valid Shadowsocks method." = "Please select a valid Shadowsocks method.";
 "Please try again." = "Please try again.";
