@@ -25,8 +25,10 @@ class ViewController: FormViewController {
 		navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
 
 		form
-			+++ Section(NSLocalizedString("General", comment: "")) { section in
+			+++ Section(header: NSLocalizedString("General", comment: ""), footer: "") { section in
 				section.tag = "General"
+				section.header?.height = { 30 }
+				section.footer?.height = { .leastNonzeroMagnitude }
 			}
 			<<< SwitchRow { row in
 				row.tag = "General - Hide VPN Icon"
@@ -43,8 +45,10 @@ class ViewController: FormViewController {
 				row.add(rule: RuleURL(allowsEmpty: false, requiresProtocol: true, msg: NSLocalizedString("Please enter a valid PAC URL.", comment: "")))
 			}
 
-			+++ Section(NSLocalizedString("Shadowsocks", comment: "")) { section in
+			+++ Section(header: NSLocalizedString("Shadowsocks", comment: ""), footer: "") { section in
 				section.tag = "Shadowsocks"
+				section.header?.height = { 30 }
+				section.footer?.height = { .leastNonzeroMagnitude }
 			}
 			<<< TextRow { row in
 				row.tag = "Shadowsocks - Server Address"
@@ -107,8 +111,10 @@ class ViewController: FormViewController {
 				row.cell.detailTextLabel?.textColor = .black
 			}
 
-			+++ Section { section in
+			+++ Section(header: "", footer: "") { section in
 				section.tag = "Configure"
+				section.header?.height = { 30 }
+				section.footer?.height = { .leastNonzeroMagnitude }
 			}
 			<<< ButtonRow { row in
 				row.tag = "Configure - Configure"
