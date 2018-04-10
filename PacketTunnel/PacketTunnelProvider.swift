@@ -42,7 +42,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
 		let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "8.8.8.8")
 		networkSettings.proxySettings = proxySettings
-		networkSettings.ipv4Settings = NEIPv4Settings(addresses: [generalHideVPNIcon ? "0.0.0.0" : "10.0.0.1"], subnetMasks: ["255.255.255.0"])
+		networkSettings.ipv4Settings = NEIPv4Settings(addresses: [generalHideVPNIcon ? "0.0.0.0" : "10.0.0.1"], subnetMasks: ["255.0.0.0"])
 		networkSettings.mtu = 1500
 
 		setTunnelNetworkSettings(networkSettings) { error in

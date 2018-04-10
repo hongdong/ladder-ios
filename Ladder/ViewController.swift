@@ -119,7 +119,6 @@ class ViewController: FormViewController {
 			<<< ButtonRow { row in
 				row.tag = "Configure - Configure"
 				row.title = NSLocalizedString("Configure", comment: "")
-				row.cell.height = { 50 }
 			}.onCellSelection { _, _ in
 				let configuringAlertController = UIAlertController(
 					title: NSLocalizedString("Configuring...", comment: ""),
