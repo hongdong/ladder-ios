@@ -10,7 +10,7 @@ Keep in mind:
 
 * Hide VPN Icon
 * PAC (Proxy auto-config)
-* Multiple Shadowsocks Method
+* Multiple Shadowsocks Methods
 	* `AES-128-CFB`
 	* `AES-192-CFB`
 	* `AES-256-CFB` **(RECOMMENDED)**
@@ -55,6 +55,12 @@ questions or ideas [here](https://github.com/sheng/ladder-ios/issues).
 
 If you want to help build this project, simply send pull requests
 [here](https://github.com/sheng/ladder-ios/pulls).
+
+## TODOs
+
+* [ ] No longer rely on the [NEKit](https://github.com/zhuhaow/NEKit) to
+implement the Shadowsocks protocol
+* [ ] Add support for more Shadowsocks methods
 
 ## License
 
