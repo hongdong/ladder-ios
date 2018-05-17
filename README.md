@@ -58,9 +58,11 @@ If you want to help build this project, simply send pull requests
 
 ## TODOs
 
+* [ ] Provide an option to store PAC during configuration
 * [ ] No longer rely on the [NEKit](https://github.com/zhuhaow/NEKit) to
 implement the Shadowsocks protocol
 * [ ] Add support for more Shadowsocks methods
+* [ ] Add support for IPv6
 
 ## License
 
