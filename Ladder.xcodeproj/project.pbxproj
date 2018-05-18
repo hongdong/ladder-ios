@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0445F9AF20676962003993A3 /* Shadowsocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0445F9AE20676962003993A3 /* Shadowsocks.swift */; };
-		04789A26207676B700AEBA80 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04789A25207676B600AEBA80 /* Reachability.framework */; };
+		044E345220AF46CF005B0CB5 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044E345120AF46CF005B0CB5 /* Alamofire.framework */; };
 		0485CBE72073838C003F596A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0485CBE52073838C003F596A /* InfoPlist.strings */; };
 		0485CBEB207383E6003F596A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0485CBE9207383E6003F596A /* Localizable.strings */; };
 		0495EA552073D49000320501 /* Eureka.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA542073D49000320501 /* Eureka.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -50,7 +50,7 @@
 
 /* Begin PBXFileReference section */
 		0445F9AE20676962003993A3 /* Shadowsocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shadowsocks.swift; sourceTree = "<group>"; };
-		04789A25207676B600AEBA80 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
+		044E345120AF46CF005B0CB5 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		0485CBE62073838C003F596A /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0485CBE8207383B6003F596A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		0485CBEA207383E6003F596A /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -78,10 +78,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				044E345220AF46CF005B0CB5 /* Alamofire.framework in Frameworks */,
 				0495EA552073D49000320501 /* Eureka.framework in Frameworks */,
 				0495EA572073D49C00320501 /* KeychainAccess.framework in Frameworks */,
 				04D1D0BE2065513200F5C4B9 /* NetworkExtension.framework in Frameworks */,
-				04789A26207676B700AEBA80 /* Reachability.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,11 +134,11 @@
 		04EA462C2064CFE2002578AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				044E345120AF46CF005B0CB5 /* Alamofire.framework */,
 				0495EA542073D49000320501 /* Eureka.framework */,
 				0495EA562073D49B00320501 /* KeychainAccess.framework */,
 				0495EA592073D77500320501 /* NEKit.framework */,
 				04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */,
-				04789A25207676B600AEBA80 /* Reachability.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -285,7 +285,7 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Eureka.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/KeychainAccess.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",

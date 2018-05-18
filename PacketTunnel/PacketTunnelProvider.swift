@@ -15,6 +15,8 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 		guard let providerConfiguration = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
 			let generalHideVPNIcon = providerConfiguration["general_hide_vpn_icon"] as? Bool,
 			let generalPACURL = providerConfiguration["general_pac_url"] as? String,
+			let generalPAC = providerConfiguration["general_pac"] as? String,
+			let generalPACOffline = providerConfiguration["general_pac_offline"] as? Bool,
 			let shadowsocksServerAddress = providerConfiguration["shadowsocks_server_address"] as? String,
 			let shadowsocksServerPort = providerConfiguration["shadowsocks_server_port"] as? UInt16,
 			let shadowsocksLocalAddress = providerConfiguration["shadowsocks_local_address"] as? String,
@@ -36,7 +38,11 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
 		let proxySettings = NEProxySettings()
 		proxySettings.autoProxyConfigurationEnabled = true
-		proxySettings.proxyAutoConfigurationURL = URL(string: generalPACURL)
+		if !generalPACOffline {
+			proxySettings.proxyAutoConfigurationURL = URL(string: generalPACURL)
+		} else {
+			proxySettings.proxyAutoConfigurationJavaScript = generalPAC
+		}
 		proxySettings.excludeSimpleHostnames = true
 		proxySettings.matchDomains = [""]
 

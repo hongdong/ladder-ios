@@ -6,10 +6,10 @@
 //  Copyright © 2018 Aofei Sheng. All rights reserved.
 //
 
+import Alamofire
 import Eureka
 import KeychainAccess
 import NetworkExtension
-import Reachability
 
 class ViewController: FormViewController {
 	let mainKeychain = Keychain(service: Bundle.main.bundleIdentifier!)
@@ -43,6 +43,11 @@ class ViewController: FormViewController {
 
 				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a PAC URL.", comment: "")))
 				row.add(rule: RuleURL(allowsEmpty: false, requiresProtocol: true, msg: NSLocalizedString("Please enter a valid PAC URL.", comment: "")))
+			}
+			<<< SwitchRow { row in
+				row.tag = "General - PAC Offline"
+				row.title = NSLocalizedString("PAC Offline", comment: "")
+				row.value = mainKeychain["general_pac_offline"] == "true"
 			}
 
 			+++ Section(header: NSLocalizedString("Shadowsocks", comment: ""), footer: "") { section in
@@ -127,7 +132,7 @@ class ViewController: FormViewController {
 				)
 				self.present(configuringAlertController, animated: true)
 
-				if Reachability()!.connection == .none {
+				if !Alamofire.NetworkReachabilityManager(host: "8.8.8.8")!.isReachable {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please check your network settings and allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: ""),
@@ -173,6 +178,7 @@ class ViewController: FormViewController {
 
 					let generalHideVPNIcon = (self.form.rowBy(tag: "General - Hide VPN Icon") as! SwitchRow).value!
 					let generalPACURL = (self.form.rowBy(tag: "General - PAC URL") as! URLRow).value!
+					let generalPACOffline = (self.form.rowBy(tag: "General - PAC Offline") as! SwitchRow).value!
 					let shadowsocksServerAddress = (self.form.rowBy(tag: "Shadowsocks - Server Address") as! TextRow).value!
 					let shadowsocksServerPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Server Port") as! IntRow).value!)
 					let shadowsocksLocalAddress = (self.form.rowBy(tag: "Shadowsocks - Local Address") as! TextRow).value!
@@ -180,54 +186,72 @@ class ViewController: FormViewController {
 					let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks - Password") as! PasswordRow).value!
 					let shadowsocksMethod = (self.form.rowBy(tag: "Shadowsocks - Method") as! ActionSheetRow<String>).value!
 
-					let providerConfiguration = NETunnelProviderProtocol()
-					providerConfiguration.serverAddress = "Ladder"
-					providerConfiguration.providerConfiguration = [
-						"general_hide_vpn_icon": generalHideVPNIcon,
-						"general_pac_url": generalPACURL.absoluteString,
-						"shadowsocks_server_address": shadowsocksServerAddress,
-						"shadowsocks_server_port": shadowsocksServerPort,
-						"shadowsocks_local_address": shadowsocksLocalAddress,
-						"shadowsocks_local_port": shadowsocksLocalPort,
-						"shadowsocks_password": shadowsocksPassword,
-						"shadowsocks_method": shadowsocksMethod,
-					]
+					Alamofire.request(generalPACURL).responseString { response in
+						if response.response?.statusCode != 200 || response.value == nil {
+							let alertController = UIAlertController(
+								title: NSLocalizedString("Configuration Failed", comment: ""),
+								message: NSLocalizedString("Unable to download data from the PAC URL.", comment: ""),
+								preferredStyle: .alert
+							)
+							alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
+							configuringAlertController.dismiss(animated: true) {
+								self.present(alertController, animated: true)
+							}
+							return
+						}
 
-					providerManager.localizedDescription = NSLocalizedString("Ladder", comment: "")
-					providerManager.protocolConfiguration = providerConfiguration
-					providerManager.isEnabled = true
-					providerManager.saveToPreferences { error in
-						if error == nil {
-							self.mainKeychain["general_hide_vpn_icon"] = generalHideVPNIcon ? "true" : "false"
-							self.mainKeychain["general_pac_url"] = generalPACURL.absoluteString
-							self.mainKeychain["shadowsocks_server_address"] = shadowsocksServerAddress
-							self.mainKeychain["shadowsocks_server_port"] = String(stringInterpolationSegment: shadowsocksServerPort)
-							self.mainKeychain["shadowsocks_local_address"] = shadowsocksLocalAddress
-							self.mainKeychain["shadowsocks_local_port"] = String(stringInterpolationSegment: shadowsocksLocalPort)
-							self.mainKeychain["shadowsocks_password"] = shadowsocksPassword
-							self.mainKeychain["shadowsocks_method"] = shadowsocksMethod
-							providerManager.loadFromPreferences { error in
-								if error == nil {
-									providerManager.connection.stopVPNTunnel()
-									DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-										try? providerManager.connection.startVPNTunnel()
+						let providerConfiguration = NETunnelProviderProtocol()
+						providerConfiguration.serverAddress = "Ladder"
+						providerConfiguration.providerConfiguration = [
+							"general_hide_vpn_icon": generalHideVPNIcon,
+							"general_pac_url": generalPACURL.absoluteString,
+							"general_pac": response.value!,
+							"general_pac_offline": generalPACOffline,
+							"shadowsocks_server_address": shadowsocksServerAddress,
+							"shadowsocks_server_port": shadowsocksServerPort,
+							"shadowsocks_local_address": shadowsocksLocalAddress,
+							"shadowsocks_local_port": shadowsocksLocalPort,
+							"shadowsocks_password": shadowsocksPassword,
+							"shadowsocks_method": shadowsocksMethod,
+						]
+
+						providerManager.localizedDescription = NSLocalizedString("Ladder", comment: "")
+						providerManager.protocolConfiguration = providerConfiguration
+						providerManager.isEnabled = true
+						providerManager.saveToPreferences { error in
+							if error == nil {
+								self.mainKeychain["general_hide_vpn_icon"] = generalHideVPNIcon ? "true" : "false"
+								self.mainKeychain["general_pac_url"] = generalPACURL.absoluteString
+								self.mainKeychain["general_pac_offline"] = generalPACOffline ? "true" : "false"
+								self.mainKeychain["shadowsocks_server_address"] = shadowsocksServerAddress
+								self.mainKeychain["shadowsocks_server_port"] = String(stringInterpolationSegment: shadowsocksServerPort)
+								self.mainKeychain["shadowsocks_local_address"] = shadowsocksLocalAddress
+								self.mainKeychain["shadowsocks_local_port"] = String(stringInterpolationSegment: shadowsocksLocalPort)
+								self.mainKeychain["shadowsocks_password"] = shadowsocksPassword
+								self.mainKeychain["shadowsocks_method"] = shadowsocksMethod
+								providerManager.loadFromPreferences { error in
+									if error == nil {
+										providerManager.connection.stopVPNTunnel()
+										DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+											try? providerManager.connection.startVPNTunnel()
+										}
 									}
 								}
 							}
-						}
-						configuringAlertController.dismiss(animated: true) {
-							let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-							if error != nil {
-								alertController.title = NSLocalizedString("Configuration Failed", comment: "")
-								alertController.message = NSLocalizedString("Please try again.", comment: "")
-								alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-							} else {
-								alertController.title = NSLocalizedString("Configured!", comment: "")
-							}
-							self.present(alertController, animated: true) {
-								if error == nil {
-									DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-										alertController.dismiss(animated: true)
+							configuringAlertController.dismiss(animated: true) {
+								let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+								if error != nil {
+									alertController.title = NSLocalizedString("Configuration Failed", comment: "")
+									alertController.message = NSLocalizedString("Please try again.", comment: "")
+									alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
+								} else {
+									alertController.title = NSLocalizedString("Configured!", comment: "")
+								}
+								self.present(alertController, animated: true) {
+									if error == nil {
+										DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+											alertController.dismiss(animated: true)
+										}
 									}
 								}
 							}
