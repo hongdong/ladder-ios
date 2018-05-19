@@ -6,6 +6,7 @@
 //  Copyright © 2018 Aofei Sheng. All rights reserved.
 //
 
+import Alamofire
 import NetworkExtension
 
 class PacketTunnelProvider: NEPacketTunnelProvider {
@@ -14,8 +15,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 	override func startTunnel(options _: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
 		guard let providerConfiguration = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
 			let generalHideVPNIcon = providerConfiguration["general_hide_vpn_icon"] as? Bool,
-			let generalPACURL = providerConfiguration["general_pac_url"] as? String,
-			let generalPAC = providerConfiguration["general_pac"] as? String,
+			let generalPACURL = URL(string: (providerConfiguration["general_pac_url"] as? String) ?? ""),
 			let generalPACOffline = providerConfiguration["general_pac_offline"] as? Bool,
 			let shadowsocksServerAddress = providerConfiguration["shadowsocks_server_address"] as? String,
 			let shadowsocksServerPort = providerConfiguration["shadowsocks_server_port"] as? UInt16,
@@ -27,40 +27,46 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 			return
 		}
 
-		shadowsocks = Shadowsocks(
-			serverAddress: shadowsocksServerAddress,
-			serverPort: shadowsocksServerPort,
-			localAddress: shadowsocksLocalAddress,
-			localPort: shadowsocksLocalPort,
-			password: shadowsocksPassword,
-			method: shadowsocksMethod
-		)
-
-		let proxySettings = NEProxySettings()
-		proxySettings.autoProxyConfigurationEnabled = true
-		if !generalPACOffline {
-			proxySettings.proxyAutoConfigurationURL = URL(string: generalPACURL)
-		} else {
-			proxySettings.proxyAutoConfigurationJavaScript = generalPAC
-		}
-		proxySettings.excludeSimpleHostnames = true
-		proxySettings.matchDomains = [""]
-
-		let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "8.8.8.8")
-		networkSettings.proxySettings = proxySettings
-		networkSettings.ipv4Settings = NEIPv4Settings(addresses: [generalHideVPNIcon ? "0.0.0.0" : "10.0.0.1"], subnetMasks: ["255.0.0.0"])
-		networkSettings.mtu = 1500
-
-		setTunnelNetworkSettings(networkSettings) { error in
-			if error == nil {
-				do {
-					try self.shadowsocks?.start()
-				} catch let error {
-					completionHandler(error)
-					return
-				}
+		Alamofire.request(generalPACURL).responseString { response in
+			if response.response?.statusCode != 200 || response.value == nil {
+				completionHandler(nil)
+				return
 			}
-			completionHandler(error)
+
+			let proxySettings = NEProxySettings()
+			proxySettings.autoProxyConfigurationEnabled = true
+			if !generalPACOffline {
+				proxySettings.proxyAutoConfigurationURL = generalPACURL
+			} else {
+				proxySettings.proxyAutoConfigurationJavaScript = response.value
+			}
+			proxySettings.excludeSimpleHostnames = true
+			proxySettings.matchDomains = [""]
+
+			let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "8.8.8.8")
+			networkSettings.proxySettings = proxySettings
+			networkSettings.ipv4Settings = NEIPv4Settings(addresses: [generalHideVPNIcon ? "0.0.0.0" : "10.0.0.1"], subnetMasks: ["255.0.0.0"])
+			networkSettings.mtu = 1500
+
+			self.setTunnelNetworkSettings(networkSettings) { error in
+				if error == nil {
+					self.shadowsocks = Shadowsocks(
+						serverAddress: shadowsocksServerAddress,
+						serverPort: shadowsocksServerPort,
+						localAddress: shadowsocksLocalAddress,
+						localPort: shadowsocksLocalPort,
+						password: shadowsocksPassword,
+						method: shadowsocksMethod
+					)
+					do {
+						try self.shadowsocks?.start()
+					} catch let error {
+						completionHandler(error)
+						return
+					}
+				}
+				completionHandler(error)
+			}
 		}
 	}
 

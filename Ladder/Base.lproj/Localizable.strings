@@ -47,5 +47,4 @@
 "Configured!" = "Configured!";
 "Configuration Failed" = "Configuration Failed";
 "Please check your network settings and allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\")." = "Please check your network settings and allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").";
-"Unable to download data from the PAC URL." = "Unable to download data from the PAC URL.";
 "Please try again." = "Please try again.";
