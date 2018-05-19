@@ -14,6 +14,7 @@
 		0495EA552073D49000320501 /* Eureka.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA542073D49000320501 /* Eureka.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		0495EA572073D49C00320501 /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA562073D49B00320501 /* KeychainAccess.framework */; };
 		0495EA5A2073D77500320501 /* NEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA592073D77500320501 /* NEKit.framework */; };
+		04B96FE920AFDA9900D9E1F2 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044E345120AF46CF005B0CB5 /* Alamofire.framework */; };
 		04D1D0BE2065513200F5C4B9 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */; };
 		04D1D0BF2065513D00F5C4B9 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */; };
 		04EA46092064C9B7002578AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EA46082064C9B7002578AF /* AppDelegate.swift */; };
@@ -89,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B96FE920AFDA9900D9E1F2 /* Alamofire.framework in Frameworks */,
 				0495EA5A2073D77500320501 /* NEKit.framework in Frameworks */,
 				04D1D0BF2065513D00F5C4B9 /* NetworkExtension.framework in Frameworks */,
 			);

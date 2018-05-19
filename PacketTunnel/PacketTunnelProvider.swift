@@ -6,6 +6,7 @@
 //  Copyright © 2018 Aofei Sheng. All rights reserved.
 //
 
+import Alamofire
 import NetworkExtension
 
 class PacketTunnelProvider: NEPacketTunnelProvider {
@@ -14,9 +15,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 	override func startTunnel(options _: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
 		guard let providerConfiguration = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
 			let generalHideVPNIcon = providerConfiguration["general_hide_vpn_icon"] as? Bool,
-			let generalPACURL = providerConfiguration["general_pac_url"] as? String,
 			let generalPAC = providerConfiguration["general_pac"] as? String,
-			let generalPACOffline = providerConfiguration["general_pac_offline"] as? Bool,
 			let shadowsocksServerAddress = providerConfiguration["shadowsocks_server_address"] as? String,
 			let shadowsocksServerPort = providerConfiguration["shadowsocks_server_port"] as? UInt16,
 			let shadowsocksLocalAddress = providerConfiguration["shadowsocks_local_address"] as? String,
@@ -27,22 +26,9 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 			return
 		}
 
-		shadowsocks = Shadowsocks(
-			serverAddress: shadowsocksServerAddress,
-			serverPort: shadowsocksServerPort,
-			localAddress: shadowsocksLocalAddress,
-			localPort: shadowsocksLocalPort,
-			password: shadowsocksPassword,
-			method: shadowsocksMethod
-		)
-
 		let proxySettings = NEProxySettings()
 		proxySettings.autoProxyConfigurationEnabled = true
-		if !generalPACOffline {
-			proxySettings.proxyAutoConfigurationURL = URL(string: generalPACURL)
-		} else {
-			proxySettings.proxyAutoConfigurationJavaScript = generalPAC
-		}
+		proxySettings.proxyAutoConfigurationJavaScript = generalPAC
 		proxySettings.excludeSimpleHostnames = true
 		proxySettings.matchDomains = [""]
 
@@ -52,20 +38,56 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 		networkSettings.mtu = 1500
 
 		setTunnelNetworkSettings(networkSettings) { error in
-			if error == nil {
+			if error == nil && self.shadowsocks == nil {
 				do {
+					self.shadowsocks = Shadowsocks(
+						serverAddress: shadowsocksServerAddress,
+						serverPort: shadowsocksServerPort,
+						localAddress: shadowsocksLocalAddress,
+						localPort: shadowsocksLocalPort,
+						password: shadowsocksPassword,
+						method: shadowsocksMethod
+					)
 					try self.shadowsocks?.start()
 				} catch let error {
 					completionHandler(error)
 					return
 				}
+
+				self.updatePACHourly()
 			}
 			completionHandler(error)
 		}
 	}
 
-	override func stopTunnel(with _: NEProviderStopReason, completionHandler: @escaping () -> Void) {
-		shadowsocks?.stop()
+	override func stopTunnel(with reason: NEProviderStopReason, completionHandler: @escaping () -> Void) {
+		if reason != .none {
+			shadowsocks?.stop()
+		}
 		completionHandler()
+	}
+
+	func updatePACHourly() {
+		guard var providerConfiguration = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
+			let generalPACURL = URL(string: (providerConfiguration["general_pac_url"] as? String) ?? ""),
+			let generalPAC = providerConfiguration["general_pac"] as? String else {
+			return
+		}
+
+		Alamofire.request(generalPACURL).responseString { response in
+			if response.response?.statusCode == 200, let pac = response.value, pac != generalPAC {
+				providerConfiguration["general_pac"] = pac
+
+				self.stopTunnel(with: .none) {
+					DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+						self.startTunnel(options: nil) { _ in }
+					}
+				}
+			}
+
+			DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3600) {
+				self.updatePACHourly()
+			}
+		}
 	}
 }

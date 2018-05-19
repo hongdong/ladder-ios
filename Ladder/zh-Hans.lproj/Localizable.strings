@@ -17,7 +17,6 @@
 "Enter PAC URL here" = "在这里输入 PAC URL";
 "Please enter a PAC URL." = "请输入一个 PAC URL。";
 "Please enter a valid PAC URL." = "请输入一个有效的 PAC URL。";
-"PAC Offline" = "PAC 离线化";
 
 "Shadowsocks" = "影梭";
 "Server Address" = "服务器地址";

@@ -44,11 +44,6 @@ class ViewController: FormViewController {
 				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a PAC URL.", comment: "")))
 				row.add(rule: RuleURL(allowsEmpty: false, requiresProtocol: true, msg: NSLocalizedString("Please enter a valid PAC URL.", comment: "")))
 			}
-			<<< SwitchRow { row in
-				row.tag = "General - PAC Offline"
-				row.title = NSLocalizedString("PAC Offline", comment: "")
-				row.value = mainKeychain["general_pac_offline"] == "true"
-			}
 
 			+++ Section(header: NSLocalizedString("Shadowsocks", comment: ""), footer: "") { section in
 				section.tag = "Shadowsocks"
@@ -178,7 +173,6 @@ class ViewController: FormViewController {
 
 					let generalHideVPNIcon = (self.form.rowBy(tag: "General - Hide VPN Icon") as! SwitchRow).value!
 					let generalPACURL = (self.form.rowBy(tag: "General - PAC URL") as! URLRow).value!
-					let generalPACOffline = (self.form.rowBy(tag: "General - PAC Offline") as! SwitchRow).value!
 					let shadowsocksServerAddress = (self.form.rowBy(tag: "Shadowsocks - Server Address") as! TextRow).value!
 					let shadowsocksServerPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Server Port") as! IntRow).value!)
 					let shadowsocksLocalAddress = (self.form.rowBy(tag: "Shadowsocks - Local Address") as! TextRow).value!
@@ -206,7 +200,6 @@ class ViewController: FormViewController {
 							"general_hide_vpn_icon": generalHideVPNIcon,
 							"general_pac_url": generalPACURL.absoluteString,
 							"general_pac": response.value!,
-							"general_pac_offline": generalPACOffline,
 							"shadowsocks_server_address": shadowsocksServerAddress,
 							"shadowsocks_server_port": shadowsocksServerPort,
 							"shadowsocks_local_address": shadowsocksLocalAddress,
@@ -222,7 +215,6 @@ class ViewController: FormViewController {
 							if error == nil {
 								self.mainKeychain["general_hide_vpn_icon"] = generalHideVPNIcon ? "true" : "false"
 								self.mainKeychain["general_pac_url"] = generalPACURL.absoluteString
-								self.mainKeychain["general_pac_offline"] = generalPACOffline ? "true" : "false"
 								self.mainKeychain["shadowsocks_server_address"] = shadowsocksServerAddress
 								self.mainKeychain["shadowsocks_server_port"] = String(stringInterpolationSegment: shadowsocksServerPort)
 								self.mainKeychain["shadowsocks_local_address"] = shadowsocksLocalAddress
