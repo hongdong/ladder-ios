@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		040753E820AFCD13007EA709 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044E345120AF46CF005B0CB5 /* Alamofire.framework */; };
 		0445F9AF20676962003993A3 /* Shadowsocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0445F9AE20676962003993A3 /* Shadowsocks.swift */; };
 		044E345220AF46CF005B0CB5 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044E345120AF46CF005B0CB5 /* Alamofire.framework */; };
 		0485CBE72073838C003F596A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0485CBE52073838C003F596A /* InfoPlist.strings */; };
@@ -90,7 +89,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				040753E820AFCD13007EA709 /* Alamofire.framework in Frameworks */,
 				0495EA5A2073D77500320501 /* NEKit.framework in Frameworks */,
 				04D1D0BF2065513D00F5C4B9 /* NetworkExtension.framework in Frameworks */,
 			);

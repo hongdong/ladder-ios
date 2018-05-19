@@ -47,4 +47,5 @@
 "Configured!" = "已配置！";
 "Configuration Failed" = "配置失败";
 "Please check your network settings and allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\")." = "请检查您的网络设置，并在系统的“设置-蜂窝移动网络”选项中，允许梯子访问您的无线数据（记住勾选“WLAN 与蜂窝移动网”）。";
+"Unable to download data from the PAC URL." = "无法从 PAC URL 下载数据。";
 "Please try again." = "请再试一次。";
