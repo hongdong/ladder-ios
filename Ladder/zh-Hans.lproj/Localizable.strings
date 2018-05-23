@@ -17,6 +17,11 @@
 "Enter PAC URL here" = "在这里输入 PAC URL";
 "Please enter a PAC URL." = "请输入一个 PAC URL。";
 "Please enter a valid PAC URL." = "请输入一个有效的 PAC URL。";
+"PAC Max Age" = "PAC 有效时间";
+"Enter PAC max age here" = "在这里输入 PAC 有效时间";
+"Please enter a PAC max age." = "请输入一个 PAC 有效时间。";
+"PAC max age must greater than or equal to 0." = "PAC 有效时间必须大于或等于 0。";
+"PAC max age must smaller than or equal to 86400." = "PAC 有效时间必须小于或等于 86400。";
 
 "Shadowsocks" = "影梭";
 "Server Address" = "服务器地址";

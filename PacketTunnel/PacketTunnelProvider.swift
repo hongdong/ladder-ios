@@ -15,7 +15,9 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 	override func startTunnel(options _: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
 		guard let providerConfiguration = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
 			let generalHideVPNIcon = providerConfiguration["general_hide_vpn_icon"] as? Bool,
+			let generalPACURL = URL(string: (providerConfiguration["general_pac_url"] as? String) ?? ""),
 			let generalPAC = providerConfiguration["general_pac"] as? String,
+			let generalPACMaxAge = providerConfiguration["general_pac_max_age"] as? TimeInterval,
 			let shadowsocksServerAddress = providerConfiguration["shadowsocks_server_address"] as? String,
 			let shadowsocksServerPort = providerConfiguration["shadowsocks_server_port"] as? UInt16,
 			let shadowsocksLocalAddress = providerConfiguration["shadowsocks_local_address"] as? String,
@@ -28,7 +30,11 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
 		let proxySettings = NEProxySettings()
 		proxySettings.autoProxyConfigurationEnabled = true
-		proxySettings.proxyAutoConfigurationJavaScript = generalPAC
+		if generalPACMaxAge == 0 {
+			proxySettings.proxyAutoConfigurationURL = generalPACURL
+		} else {
+			proxySettings.proxyAutoConfigurationJavaScript = generalPAC
+		}
 		proxySettings.excludeSimpleHostnames = true
 		proxySettings.matchDomains = [""]
 
@@ -54,7 +60,9 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 					return
 				}
 
-				self.updatePACHourly()
+				if generalPACMaxAge > 0 {
+					self.updatePACPeriodically()
+				}
 			}
 			completionHandler(error)
 		}
@@ -67,10 +75,11 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 		completionHandler()
 	}
 
-	func updatePACHourly() {
+	func updatePACPeriodically() {
 		guard var providerConfiguration = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
 			let generalPACURL = URL(string: (providerConfiguration["general_pac_url"] as? String) ?? ""),
-			let generalPAC = providerConfiguration["general_pac"] as? String else {
+			let generalPAC = providerConfiguration["general_pac"] as? String,
+			let generalPACMaxAge = providerConfiguration["general_pac_max_age"] as? TimeInterval else {
 			return
 		}
 
@@ -79,14 +88,14 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 				providerConfiguration["general_pac"] = pac
 
 				self.stopTunnel(with: .none) {
-					DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 						self.startTunnel(options: nil) { _ in }
 					}
 				}
 			}
 
-			DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3600) {
-				self.updatePACHourly()
+			DispatchQueue.main.asyncAfter(deadline: .now() + generalPACMaxAge) {
+				self.updatePACPeriodically()
 			}
 		}
 	}

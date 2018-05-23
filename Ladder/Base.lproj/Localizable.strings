@@ -17,6 +17,11 @@
 "Enter PAC URL here" = "Enter PAC URL here";
 "Please enter a PAC URL." = "Please enter a PAC URL.";
 "Please enter a valid PAC URL." = "Please enter a valid PAC URL.";
+"PAC Max Age" = "PAC Max Age";
+"Enter PAC max age here" = "Enter PAC max age here";
+"Please enter a PAC max age." = "Please enter a PAC max age.";
+"PAC max age must greater than or equal to 0." = "PAC max age must greater than or equal to 0.";
+"PAC max age must smaller than or equal to 86400." = "PAC max age must smaller than or equal to 86400.";
 
 "Shadowsocks" = "Shadowsocks";
 "Server Address" = "Server Address";

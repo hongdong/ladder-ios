@@ -10,6 +10,7 @@ import Alamofire
 import Eureka
 import KeychainAccess
 import NetworkExtension
+import SafariServices
 
 class ViewController: FormViewController {
 	let mainKeychain = Keychain(service: Bundle.main.bundleIdentifier!)
@@ -18,7 +19,7 @@ class ViewController: FormViewController {
 		super.viewDidLoad()
 
 		navigationItem.title = NSLocalizedString("Ladder", comment: "")
-		navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Icons/Info"), style: .plain, target: self, action: #selector(openInfo))
+		navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Icons/Info"), style: .plain, target: self, action: #selector(openPost))
 		navigationController?.navigationBar.barStyle = .black
 		navigationController?.navigationBar.tintColor = .white
 		navigationController?.navigationBar.barTintColor = UIColor(red: 80 / 255, green: 140 / 255, blue: 240 / 255, alpha: 1)
@@ -43,6 +44,17 @@ class ViewController: FormViewController {
 
 				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a PAC URL.", comment: "")))
 				row.add(rule: RuleURL(allowsEmpty: false, requiresProtocol: true, msg: NSLocalizedString("Please enter a valid PAC URL.", comment: "")))
+			}
+			<<< IntRow { row in
+				row.tag = "General - PAC Max Age"
+				row.title = NSLocalizedString("PAC Max Age", comment: "")
+				row.placeholder = NSLocalizedString("Enter PAC max age here", comment: "")
+				row.value = Int(mainKeychain["general_pac_max_age"] ?? "3600")
+				row.formatter = NumberFormatter()
+
+				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a PAC max age.", comment: "")))
+				row.add(rule: RuleGreaterOrEqualThan(min: 0, msg: NSLocalizedString("PAC max age must greater than or equal to 0.", comment: "")))
+				row.add(rule: RuleSmallerOrEqualThan(max: 86400, msg: NSLocalizedString("PAC max age must smaller than or equal to 86400.", comment: "")))
 			}
 
 			+++ Section(header: NSLocalizedString("Shadowsocks", comment: ""), footer: "") { section in
@@ -173,10 +185,11 @@ class ViewController: FormViewController {
 
 					let generalHideVPNIcon = (self.form.rowBy(tag: "General - Hide VPN Icon") as! SwitchRow).value!
 					let generalPACURL = (self.form.rowBy(tag: "General - PAC URL") as! URLRow).value!
+					let generalPACMaxAge = (self.form.rowBy(tag: "General - PAC Max Age") as! IntRow).value!
 					let shadowsocksServerAddress = (self.form.rowBy(tag: "Shadowsocks - Server Address") as! TextRow).value!
-					let shadowsocksServerPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Server Port") as! IntRow).value!)
+					let shadowsocksServerPort = (self.form.rowBy(tag: "Shadowsocks - Server Port") as! IntRow).value!
 					let shadowsocksLocalAddress = (self.form.rowBy(tag: "Shadowsocks - Local Address") as! TextRow).value!
-					let shadowsocksLocalPort = UInt16((self.form.rowBy(tag: "Shadowsocks - Local Port") as! IntRow).value!)
+					let shadowsocksLocalPort = (self.form.rowBy(tag: "Shadowsocks - Local Port") as! IntRow).value!
 					let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks - Password") as! PasswordRow).value!
 					let shadowsocksMethod = (self.form.rowBy(tag: "Shadowsocks - Method") as! ActionSheetRow<String>).value!
 
@@ -200,10 +213,11 @@ class ViewController: FormViewController {
 							"general_hide_vpn_icon": generalHideVPNIcon,
 							"general_pac_url": generalPACURL.absoluteString,
 							"general_pac": response.value!,
+							"general_pac_max_age": TimeInterval(generalPACMaxAge),
 							"shadowsocks_server_address": shadowsocksServerAddress,
-							"shadowsocks_server_port": shadowsocksServerPort,
+							"shadowsocks_server_port": UInt16(shadowsocksServerPort),
 							"shadowsocks_local_address": shadowsocksLocalAddress,
-							"shadowsocks_local_port": shadowsocksLocalPort,
+							"shadowsocks_local_port": UInt16(shadowsocksLocalPort),
 							"shadowsocks_password": shadowsocksPassword,
 							"shadowsocks_method": shadowsocksMethod,
 						]
@@ -215,16 +229,17 @@ class ViewController: FormViewController {
 							if error == nil {
 								self.mainKeychain["general_hide_vpn_icon"] = generalHideVPNIcon ? "true" : "false"
 								self.mainKeychain["general_pac_url"] = generalPACURL.absoluteString
+								self.mainKeychain["general_pac_max_age"] = String(generalPACMaxAge)
 								self.mainKeychain["shadowsocks_server_address"] = shadowsocksServerAddress
-								self.mainKeychain["shadowsocks_server_port"] = String(stringInterpolationSegment: shadowsocksServerPort)
+								self.mainKeychain["shadowsocks_server_port"] = String(shadowsocksServerPort)
 								self.mainKeychain["shadowsocks_local_address"] = shadowsocksLocalAddress
-								self.mainKeychain["shadowsocks_local_port"] = String(stringInterpolationSegment: shadowsocksLocalPort)
+								self.mainKeychain["shadowsocks_local_port"] = String(shadowsocksLocalPort)
 								self.mainKeychain["shadowsocks_password"] = shadowsocksPassword
 								self.mainKeychain["shadowsocks_method"] = shadowsocksMethod
 								providerManager.loadFromPreferences { error in
 									if error == nil {
 										providerManager.connection.stopVPNTunnel()
-										DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+										DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 											try? providerManager.connection.startVPNTunnel()
 										}
 									}
@@ -241,7 +256,7 @@ class ViewController: FormViewController {
 								}
 								self.present(alertController, animated: true) {
 									if error == nil {
-										DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+										DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 											alertController.dismiss(animated: true)
 										}
 									}
@@ -253,7 +268,7 @@ class ViewController: FormViewController {
 			}
 	}
 
-	@objc func openInfo() {
-		UIApplication.shared.openURL(URL(string: "https://aofei.org/posts/2018-04-05-immersive-wallless-experience")!)
+	@objc func openPost() {
+		present(SFSafariViewController(url: URL(string: "https://aofei.org/posts/2018-04-05-immersive-wallless-experience")!), animated: true)
 	}
 }
