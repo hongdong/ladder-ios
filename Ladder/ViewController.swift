@@ -40,7 +40,7 @@ class ViewController: FormViewController {
 				row.tag = "General - PAC URL"
 				row.title = "PAC URL"
 				row.placeholder = NSLocalizedString("Enter PAC URL here", comment: "")
-				row.value = URL(string: mainKeychain["general_pac_url"] ?? "https://aofei.org/pac?proxies=SOCKS5+127.0.0.1%3A1081%3B+SOCKS+127.0.0.1%3A1081%3B+DIRECT%3B")
+				row.value = URL(string: mainKeychain["general_pac_url"] ?? "https://git.io/gfwpac")
 
 				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a PAC URL.", comment: "")))
 				row.add(rule: RuleURL(allowsEmpty: false, requiresProtocol: true, msg: NSLocalizedString("Please enter a valid PAC URL.", comment: "")))
