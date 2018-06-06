@@ -10,6 +10,25 @@ Keep in mind:
 
 * Hide VPN Icon
 * PAC (Proxy auto-config)
+	* Default URL: [https://git.io/gfwpac](https://git.io/gfwpac)
+		* Powered by [GFWPAC](https://github.com/sheng/gfwpac)
+		* Almost no risk of being blocked (hosted on GitHub)
+		* Default proxies (will try in order):
+			* `SOCKS5 127.0.0.1:1081`
+			* `SOCKS 127.0.0.1:1081`
+			* `SOCKS5 127.0.0.1:1080`
+			* `SOCKS 127.0.0.1:1080`
+			* `DIRECT`
+	* Recommended URL: [https://aofei.org/pac](https://aofei.org/pac)
+		* Powered by [Aofei ['ɔ:fei]](https://aofei.org)
+		* Default proxies (will try in order):
+			* `SOCKS5 127.0.0.1:1080`
+			* `SOCKS 127.0.0.1:1080`
+			* `DIRECT`
+		* Custom proxies support:
+			* `https://aofei.org/pac?proxies=SOCKS5+127.0.0.1%3A1081`
+			* `https://aofei.org/pac?proxies=DIRECT`
+		* HTTP caching support (`max-age` is 3600)
 * Multiple Shadowsocks Methods
 	* `AES-128-CFB`
 	* `AES-192-CFB`
