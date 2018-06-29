@@ -58,6 +58,7 @@ $ git clone https://github.com/sheng/ladder-ios.git
 
 ```bash
 $ cd ladder-ios
+$ git submodule update --init --recursive
 $ carthage update --no-use-binaries --platform ios
 ```
 
