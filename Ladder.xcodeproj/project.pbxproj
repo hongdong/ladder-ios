@@ -397,6 +397,7 @@
 			isa = PBXGroup;
 			children = (
 				046CFB2520E6238300BC2769 /* darwin */,
+				04DC460020E622C000F6841B /* include */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -840,7 +841,6 @@
 			isa = PBXGroup;
 			children = (
 				046CFB2420E6238300BC2769 /* src */,
-				04DC460020E622C000F6841B /* include */,
 				04DC44CD20E6210A00F6841B /* lwip */,
 				04EA46352064D10E002578AF /* PacketTunnelProvider.swift */,
 				0445F9AE20676962003993A3 /* Shadowsocks.swift */,
@@ -1322,10 +1322,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				HEADER_SEARCH_PATHS = (
-					"${SRCROOT}/PacketTunnel/include",
-					"${SRCROOT}/PacketTunnel/lwip/src/include",
-				);
 				INFOPLIST_FILE = PacketTunnel/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -1338,6 +1334,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/PacketTunnel/src/include ${SRCROOT}/PacketTunnel/lwip/src/include";
 			};
 			name = Debug;
 		};
@@ -1356,10 +1353,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				HEADER_SEARCH_PATHS = (
-					"${SRCROOT}/PacketTunnel/include",
-					"${SRCROOT}/PacketTunnel/lwip/src/include",
-				);
 				INFOPLIST_FILE = PacketTunnel/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -1371,6 +1364,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = PacketTunnel/BridgingHeader.h;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/PacketTunnel/src/include ${SRCROOT}/PacketTunnel/lwip/src/include";
 			};
 			name = Release;
 		};
