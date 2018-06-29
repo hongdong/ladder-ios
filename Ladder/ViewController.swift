@@ -177,8 +177,8 @@ class ViewController: FormViewController {
 					if let providerManagers = providerManagers, providerManagers.count > 0 {
 						providerManager = providerManagers[0]
 						if providerManagers.count > 1 {
-							for index in 1 ..< providerManagers.count {
-								providerManagers[index].removeFromPreferences()
+							for providerManager in providerManagers[1...] {
+								providerManager.removeFromPreferences()
 							}
 						}
 					}

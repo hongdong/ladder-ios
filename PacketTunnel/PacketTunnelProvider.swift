@@ -38,7 +38,8 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 		proxySettings.excludeSimpleHostnames = true
 		proxySettings.matchDomains = [""]
 
-		let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "8.8.8.8")
+		let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "0.0.0.0")
+		networkSettings.dnsSettings = NEDNSSettings(servers: ["8.8.8.8", "8.8.4.4"])
 		networkSettings.proxySettings = proxySettings
 		networkSettings.ipv4Settings = NEIPv4Settings(addresses: [generalHideVPNIcon ? "0.0.0.0" : "10.0.0.1"], subnetMasks: ["255.0.0.0"])
 		networkSettings.mtu = 1500
