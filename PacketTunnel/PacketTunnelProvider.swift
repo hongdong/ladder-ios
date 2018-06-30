@@ -13,32 +13,29 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 	var shadowsocks: Shadowsocks?
 
 	override func startTunnel(options _: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
-		guard let providerConfiguration = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
-			let generalHideVPNIcon = providerConfiguration["general_hide_vpn_icon"] as? Bool,
-			let generalPACURL = URL(string: (providerConfiguration["general_pac_url"] as? String) ?? ""),
-			let generalPAC = providerConfiguration["general_pac"] as? String,
-			let generalPACMaxAge = providerConfiguration["general_pac_max_age"] as? TimeInterval,
-			let shadowsocksServerAddress = providerConfiguration["shadowsocks_server_address"] as? String,
-			let shadowsocksServerPort = providerConfiguration["shadowsocks_server_port"] as? UInt16,
-			let shadowsocksLocalAddress = providerConfiguration["shadowsocks_local_address"] as? String,
-			let shadowsocksLocalPort = providerConfiguration["shadowsocks_local_port"] as? UInt16,
-			let shadowsocksPassword = providerConfiguration["shadowsocks_password"] as? String,
-			let shadowsocksMethod = providerConfiguration["shadowsocks_method"] as? String else {
-			completionHandler(nil)
-			return
-		}
+		let providerConfiguration = (protocolConfiguration as! NETunnelProviderProtocol).providerConfiguration!
+		let generalHideVPNIcon = providerConfiguration["general_hide_vpn_icon"] as! Bool
+		let generalPACURL = URL(string: providerConfiguration["general_pac_url"] as! String)!
+		let generalPACContent = providerConfiguration["general_pac_content"] as! String
+		let generalPACMaxAge = providerConfiguration["general_pac_max_age"] as! TimeInterval
+		let shadowsocksServerAddress = lookupIPAddress(hostname: providerConfiguration["shadowsocks_server_address"] as! String)!
+		let shadowsocksServerPort = providerConfiguration["shadowsocks_server_port"] as! UInt16
+		let shadowsocksLocalAddress = lookupIPAddress(hostname: providerConfiguration["shadowsocks_local_address"] as! String)!
+		let shadowsocksLocalPort = providerConfiguration["shadowsocks_local_port"] as! UInt16
+		let shadowsocksPassword = providerConfiguration["shadowsocks_password"] as! String
+		let shadowsocksMethod = providerConfiguration["shadowsocks_method"] as! String
 
 		let proxySettings = NEProxySettings()
 		proxySettings.autoProxyConfigurationEnabled = true
 		if generalPACMaxAge == 0 {
 			proxySettings.proxyAutoConfigurationURL = generalPACURL
 		} else {
-			proxySettings.proxyAutoConfigurationJavaScript = generalPAC
+			proxySettings.proxyAutoConfigurationJavaScript = generalPACContent
 		}
 		proxySettings.excludeSimpleHostnames = true
 		proxySettings.matchDomains = [""]
 
-		let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "0.0.0.0")
+		let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: shadowsocksServerAddress)
 		networkSettings.dnsSettings = NEDNSSettings(servers: ["8.8.8.8", "8.8.4.4"])
 		networkSettings.proxySettings = proxySettings
 		networkSettings.ipv4Settings = NEIPv4Settings(addresses: [generalHideVPNIcon ? "0.0.0.0" : "10.0.0.1"], subnetMasks: ["255.0.0.0"])
@@ -77,16 +74,14 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 	}
 
 	func updatePACPeriodically() {
-		guard var providerConfiguration = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
-			let generalPACURL = URL(string: (providerConfiguration["general_pac_url"] as? String) ?? ""),
-			let generalPAC = providerConfiguration["general_pac"] as? String,
-			let generalPACMaxAge = providerConfiguration["general_pac_max_age"] as? TimeInterval else {
-			return
-		}
+		var providerConfiguration = (protocolConfiguration as! NETunnelProviderProtocol).providerConfiguration!
+		let generalPACURL = URL(string: providerConfiguration["general_pac_url"] as! String)!
+		let generalPACContent = providerConfiguration["general_pac_content"] as! String
+		let generalPACMaxAge = providerConfiguration["general_pac_max_age"] as! TimeInterval
 
 		Alamofire.request(generalPACURL).responseString { response in
-			if response.response?.statusCode == 200, let pac = response.value, pac != generalPAC {
-				providerConfiguration["general_pac"] = pac
+			if response.response?.statusCode == 200, let pacContent = response.value, pacContent != generalPACContent {
+				providerConfiguration["general_pac_content"] = pacContent
 
 				self.stopTunnel(with: .none) {
 					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -99,5 +94,18 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 				self.updatePACPeriodically()
 			}
 		}
+	}
+
+	func lookupIPAddress(hostname: String) -> String? {
+		let host = CFHostCreateWithName(nil, hostname as CFString).takeRetainedValue()
+		CFHostStartInfoResolution(host, .addresses, nil)
+		for address in (CFHostGetAddressing(host, nil)?.takeUnretainedValue() as NSArray?) ?? [] {
+			var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+			if let address = address as? NSData,
+				getnameinfo(address.bytes.assumingMemoryBound(to: sockaddr.self), socklen_t(address.length), &hostname, socklen_t(hostname.count), nil, 0, NI_NUMERICHOST) == 0 {
+				return String(cString: hostname)
+			}
+		}
+		return nil
 	}
 }

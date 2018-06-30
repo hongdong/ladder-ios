@@ -139,7 +139,7 @@ class ViewController: FormViewController {
 				)
 				self.present(configuringAlertController, animated: true)
 
-				if !Alamofire.NetworkReachabilityManager(host: "8.8.8.8")!.isReachable {
+				if let reachable = Alamofire.NetworkReachabilityManager(host: "8.8.8.8")?.isReachable, !reachable {
 					let alertController = UIAlertController(
 						title: NSLocalizedString("Configuration Failed", comment: ""),
 						message: NSLocalizedString("Please check your network settings and allow Ladder to access your wireless data in the system's \"Settings - Cellular\" option (remember to check the \"WLAN & Cellular Data\").", comment: ""),
@@ -172,47 +172,47 @@ class ViewController: FormViewController {
 					return
 				}
 
-				NETunnelProviderManager.loadAllFromPreferences { providerManagers, _ in
-					var providerManager = NETunnelProviderManager()
-					if let providerManagers = providerManagers, providerManagers.count > 0 {
-						providerManager = providerManagers[0]
-						if providerManagers.count > 1 {
-							for providerManager in providerManagers[1...] {
-								providerManager.removeFromPreferences()
-							}
+				let generalHideVPNIcon = (self.form.rowBy(tag: "General - Hide VPN Icon") as! SwitchRow).value!
+				let generalPACURL = (self.form.rowBy(tag: "General - PAC URL") as! URLRow).value!
+				let generalPACMaxAge = (self.form.rowBy(tag: "General - PAC Max Age") as! IntRow).value!
+				let shadowsocksServerAddress = (self.form.rowBy(tag: "Shadowsocks - Server Address") as! TextRow).value!
+				let shadowsocksServerPort = (self.form.rowBy(tag: "Shadowsocks - Server Port") as! IntRow).value!
+				let shadowsocksLocalAddress = (self.form.rowBy(tag: "Shadowsocks - Local Address") as! TextRow).value!
+				let shadowsocksLocalPort = (self.form.rowBy(tag: "Shadowsocks - Local Port") as! IntRow).value!
+				let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks - Password") as! PasswordRow).value!
+				let shadowsocksMethod = (self.form.rowBy(tag: "Shadowsocks - Method") as! ActionSheetRow<String>).value!
+
+				Alamofire.request(generalPACURL).responseString { response in
+					if response.response?.statusCode != 200 || response.value == nil {
+						let alertController = UIAlertController(
+							title: NSLocalizedString("Configuration Failed", comment: ""),
+							message: NSLocalizedString("Unable to download data from the PAC URL.", comment: ""),
+							preferredStyle: .alert
+						)
+						alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
+						configuringAlertController.dismiss(animated: true) {
+							self.present(alertController, animated: true)
 						}
+						return
 					}
 
-					let generalHideVPNIcon = (self.form.rowBy(tag: "General - Hide VPN Icon") as! SwitchRow).value!
-					let generalPACURL = (self.form.rowBy(tag: "General - PAC URL") as! URLRow).value!
-					let generalPACMaxAge = (self.form.rowBy(tag: "General - PAC Max Age") as! IntRow).value!
-					let shadowsocksServerAddress = (self.form.rowBy(tag: "Shadowsocks - Server Address") as! TextRow).value!
-					let shadowsocksServerPort = (self.form.rowBy(tag: "Shadowsocks - Server Port") as! IntRow).value!
-					let shadowsocksLocalAddress = (self.form.rowBy(tag: "Shadowsocks - Local Address") as! TextRow).value!
-					let shadowsocksLocalPort = (self.form.rowBy(tag: "Shadowsocks - Local Port") as! IntRow).value!
-					let shadowsocksPassword = (self.form.rowBy(tag: "Shadowsocks - Password") as! PasswordRow).value!
-					let shadowsocksMethod = (self.form.rowBy(tag: "Shadowsocks - Method") as! ActionSheetRow<String>).value!
-
-					Alamofire.request(generalPACURL).responseString { response in
-						if response.response?.statusCode != 200 || response.value == nil {
-							let alertController = UIAlertController(
-								title: NSLocalizedString("Configuration Failed", comment: ""),
-								message: NSLocalizedString("Unable to download data from the PAC URL.", comment: ""),
-								preferredStyle: .alert
-							)
-							alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default))
-							configuringAlertController.dismiss(animated: true) {
-								self.present(alertController, animated: true)
+					NETunnelProviderManager.loadAllFromPreferences { providerManagers, _ in
+						var providerManager = NETunnelProviderManager()
+						if let providerManagers = providerManagers, providerManagers.count > 0 {
+							providerManager = providerManagers[0]
+							if providerManagers.count > 1 {
+								for providerManager in providerManagers[1...] {
+									providerManager.removeFromPreferences()
+								}
 							}
-							return
 						}
 
 						let providerConfiguration = NETunnelProviderProtocol()
-						providerConfiguration.serverAddress = "Ladder"
+						providerConfiguration.serverAddress = shadowsocksServerAddress
 						providerConfiguration.providerConfiguration = [
 							"general_hide_vpn_icon": generalHideVPNIcon,
 							"general_pac_url": generalPACURL.absoluteString,
-							"general_pac": response.value!,
+							"general_pac_content": response.value!,
 							"general_pac_max_age": TimeInterval(generalPACMaxAge),
 							"shadowsocks_server_address": shadowsocksServerAddress,
 							"shadowsocks_server_port": UInt16(shadowsocksServerPort),
