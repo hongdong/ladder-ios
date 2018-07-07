@@ -25,20 +25,19 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 		let shadowsocksPassword = providerConfiguration["shadowsocks_password"] as! String
 		let shadowsocksMethod = providerConfiguration["shadowsocks_method"] as! String
 
-		let proxySettings = NEProxySettings()
-		proxySettings.autoProxyConfigurationEnabled = true
-		if generalPACMaxAge == 0 {
-			proxySettings.proxyAutoConfigurationURL = generalPACURL
-		} else {
-			proxySettings.proxyAutoConfigurationJavaScript = generalPACContent
-		}
-		proxySettings.excludeSimpleHostnames = true
-		proxySettings.matchDomains = [""]
-
 		let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: shadowsocksServerAddress)
 		networkSettings.dnsSettings = NEDNSSettings(servers: ["8.8.8.8", "8.8.4.4"])
-		networkSettings.proxySettings = proxySettings
-		networkSettings.ipv4Settings = NEIPv4Settings(addresses: [generalHideVPNIcon ? "0.0.0.0" : "10.0.0.1"], subnetMasks: ["255.0.0.0"])
+		networkSettings.proxySettings = NEProxySettings()
+		networkSettings.proxySettings?.autoProxyConfigurationEnabled = true
+		if generalPACMaxAge == 0 {
+			networkSettings.proxySettings?.proxyAutoConfigurationURL = generalPACURL
+		} else {
+			networkSettings.proxySettings?.proxyAutoConfigurationJavaScript = generalPACContent
+		}
+		networkSettings.proxySettings?.excludeSimpleHostnames = true
+		networkSettings.proxySettings?.matchDomains = [""]
+		networkSettings.ipv4Settings = NEIPv4Settings(addresses: generalHideVPNIcon ? [] : ["10.0.0.1"], subnetMasks: generalHideVPNIcon ? [] : ["255.0.0.0"])
+		networkSettings.ipv6Settings = NEIPv6Settings(addresses: generalHideVPNIcon ? [] : ["::ffff:a00:1"], networkPrefixLengths: generalHideVPNIcon ? [] : [96])
 		networkSettings.mtu = 1500
 
 		setTunnelNetworkSettings(networkSettings) { error in
