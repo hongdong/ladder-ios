@@ -304,11 +304,7 @@ class ViewController: FormViewController {
 		query[kSecClass] = kSecClassGenericPassword
 		query[kSecAttrAccount] = key
 		query[kSecValueData] = data
-		if SecItemDelete(query as CFDictionary) != noErr {
-			return false
-		} else if data != nil {
-			return SecItemAdd(query as CFDictionary, nil) == noErr
-		}
-		return true
+		SecItemDelete(query as CFDictionary)
+		return data != nil ? SecItemAdd(query as CFDictionary, nil) == noErr : true
 	}
 }
