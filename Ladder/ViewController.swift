@@ -8,13 +8,11 @@
 
 import Alamofire
 import Eureka
-import KeychainAccess
 import NetworkExtension
 import SafariServices
+import Security
 
 class ViewController: FormViewController {
-	let mainKeychain = Keychain(service: Bundle.main.bundleIdentifier!)
-
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -34,13 +32,17 @@ class ViewController: FormViewController {
 			<<< SwitchRow { row in
 				row.tag = "General - Hide VPN Icon"
 				row.title = NSLocalizedString("Hide VPN Icon", comment: "")
-				row.value = mainKeychain["general_hide_vpn_icon"] == "true"
+				if let data = ReadFromKeychain(key: "general_hide_vpn_icon") {
+					row.value = String(data: data, encoding: .utf8) == "true"
+				}
 			}
 			<<< URLRow { row in
 				row.tag = "General - PAC URL"
 				row.title = "PAC URL"
 				row.placeholder = NSLocalizedString("Enter PAC URL here", comment: "")
-				row.value = URL(string: mainKeychain["general_pac_url"] ?? "https://git.io/gfwpac")
+				if let data = ReadFromKeychain(key: "general_pac_url") {
+					row.value = URL(string: String(data: data, encoding: .utf8) ?? "https://git.io/gfwpac")
+				}
 
 				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a PAC URL.", comment: "")))
 				row.add(rule: RuleURL(allowsEmpty: false, requiresProtocol: true, msg: NSLocalizedString("Please enter a valid PAC URL.", comment: "")))
@@ -49,7 +51,9 @@ class ViewController: FormViewController {
 				row.tag = "General - PAC Max Age"
 				row.title = NSLocalizedString("PAC Max Age", comment: "")
 				row.placeholder = NSLocalizedString("Enter PAC max age here", comment: "")
-				row.value = Int(mainKeychain["general_pac_max_age"] ?? "3600")
+				if let data = ReadFromKeychain(key: "general_pac_max_age") {
+					row.value = Int(String(data: data, encoding: .utf8) ?? "3600")
+				}
 				row.formatter = NumberFormatter()
 
 				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a PAC max age.", comment: "")))
@@ -66,7 +70,9 @@ class ViewController: FormViewController {
 				row.tag = "Shadowsocks - Server Address"
 				row.title = NSLocalizedString("Server Address", comment: "")
 				row.placeholder = NSLocalizedString("Enter server address here", comment: "")
-				row.value = mainKeychain["shadowsocks_server_address"]
+				if let data = ReadFromKeychain(key: "shadowsocks_server_address") {
+					row.value = String(data: data, encoding: .utf8)
+				}
 				row.cell.textField.keyboardType = .asciiCapable
 				row.cell.textField.autocapitalizationType = .none
 
@@ -76,8 +82,8 @@ class ViewController: FormViewController {
 				row.tag = "Shadowsocks - Server Port"
 				row.title = NSLocalizedString("Server Port", comment: "")
 				row.placeholder = NSLocalizedString("Enter server port here", comment: "")
-				if let shadowsocksServerPort = mainKeychain["shadowsocks_server_port"] {
-					row.value = Int(shadowsocksServerPort)
+				if let data = ReadFromKeychain(key: "shadowsocks_server_port"), let string = String(data: data, encoding: .utf8) {
+					row.value = Int(string)
 				}
 				row.formatter = NumberFormatter()
 
@@ -89,7 +95,9 @@ class ViewController: FormViewController {
 				row.tag = "Shadowsocks - Local Address"
 				row.title = NSLocalizedString("Local Address", comment: "")
 				row.placeholder = NSLocalizedString("Enter local address here", comment: "")
-				row.value = mainKeychain["shadowsocks_local_address"] ?? "127.0.0.1"
+				if let data = ReadFromKeychain(key: "shadowsocks_local_address") {
+					row.value = String(data: data, encoding: .utf8) ?? "127.0.0.1"
+				}
 				row.cell.textField.keyboardType = .asciiCapable
 				row.cell.textField.autocapitalizationType = .none
 
@@ -99,7 +107,9 @@ class ViewController: FormViewController {
 				row.tag = "Shadowsocks - Local Port"
 				row.title = NSLocalizedString("Local Port", comment: "")
 				row.placeholder = NSLocalizedString("Enter local port here", comment: "")
-				row.value = Int(mainKeychain["shadowsocks_local_port"] ?? "1081")
+				if let data = ReadFromKeychain(key: "shadowsocks_local_port") {
+					row.value = Int(String(data: data, encoding: .utf8) ?? "1081")
+				}
 				row.formatter = NumberFormatter()
 
 				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a Shadowsocks local port.", comment: "")))
@@ -110,7 +120,9 @@ class ViewController: FormViewController {
 				row.tag = "Shadowsocks - Password"
 				row.title = NSLocalizedString("Password", comment: "")
 				row.placeholder = NSLocalizedString("Enter password here", comment: "")
-				row.value = mainKeychain["shadowsocks_password"]
+				if let data = ReadFromKeychain(key: "shadowsocks_password") {
+					row.value = String(data: data, encoding: .utf8)
+				}
 
 				row.add(rule: RuleRequired(msg: NSLocalizedString("Please enter a Shadowsocks password.", comment: "")))
 			}
@@ -119,7 +131,9 @@ class ViewController: FormViewController {
 				row.title = NSLocalizedString("Method", comment: "")
 				row.selectorTitle = NSLocalizedString("Shadowsocks Method", comment: "")
 				row.options = ["AES-128-CFB", "AES-192-CFB", "AES-256-CFB", "ChaCha20", "Salsa20", "RC4-MD5"]
-				row.value = mainKeychain["shadowsocks_method"] ?? "AES-256-CFB"
+				if let data = ReadFromKeychain(key: "shadowsocks_method") {
+					row.value = String(data: data, encoding: .utf8) ?? "AES-256-CFB"
+				}
 				row.cell.detailTextLabel?.textColor = .black
 			}
 
@@ -227,15 +241,15 @@ class ViewController: FormViewController {
 						providerManager.isEnabled = true
 						providerManager.saveToPreferences { error in
 							if error == nil {
-								self.mainKeychain["general_hide_vpn_icon"] = generalHideVPNIcon ? "true" : "false"
-								self.mainKeychain["general_pac_url"] = generalPACURL.absoluteString
-								self.mainKeychain["general_pac_max_age"] = String(generalPACMaxAge)
-								self.mainKeychain["shadowsocks_server_address"] = shadowsocksServerAddress
-								self.mainKeychain["shadowsocks_server_port"] = String(shadowsocksServerPort)
-								self.mainKeychain["shadowsocks_local_address"] = shadowsocksLocalAddress
-								self.mainKeychain["shadowsocks_local_port"] = String(shadowsocksLocalPort)
-								self.mainKeychain["shadowsocks_password"] = shadowsocksPassword
-								self.mainKeychain["shadowsocks_method"] = shadowsocksMethod
+								self.WriteToKeychain(key: "general_hide_vpn_icon", data: (generalHideVPNIcon ? "true" : "false").data(using: .utf8))
+								self.WriteToKeychain(key: "general_pac_url", data: generalPACURL.absoluteString.data(using: .utf8))
+								self.WriteToKeychain(key: "general_pac_max_age", data: String(generalPACMaxAge).data(using: .utf8))
+								self.WriteToKeychain(key: "shadowsocks_server_address", data: shadowsocksServerAddress.data(using: .utf8))
+								self.WriteToKeychain(key: "shadowsocks_server_port", data: String(shadowsocksServerPort).data(using: .utf8))
+								self.WriteToKeychain(key: "shadowsocks_local_address", data: shadowsocksLocalAddress.data(using: .utf8))
+								self.WriteToKeychain(key: "shadowsocks_local_port", data: String(shadowsocksLocalPort).data(using: .utf8))
+								self.WriteToKeychain(key: "shadowsocks_password", data: shadowsocksPassword.data(using: .utf8))
+								self.WriteToKeychain(key: "shadowsocks_method", data: shadowsocksMethod.data(using: .utf8))
 								providerManager.loadFromPreferences { error in
 									if error == nil {
 										providerManager.connection.stopVPNTunnel()
@@ -270,5 +284,31 @@ class ViewController: FormViewController {
 
 	@objc func openPost() {
 		present(SFSafariViewController(url: URL(string: "https://aofei.org/posts/2018-04-05-immersive-wallless-experience")!), animated: true)
+	}
+
+	@discardableResult
+	func ReadFromKeychain(key: String) -> Data? {
+		var query = [CFString: Any]()
+		query[kSecClass] = kSecClassGenericPassword
+		query[kSecAttrAccount] = key
+		query[kSecReturnData] = kCFBooleanTrue
+		query[kSecMatchLimit] = kSecMatchLimitOne
+		var data: CFTypeRef?
+		SecItemCopyMatching(query as CFDictionary, &data)
+		return data as? Data
+	}
+
+	@discardableResult
+	func WriteToKeychain(key: String, data: Data?) -> Bool {
+		var query = [CFString: Any]()
+		query[kSecClass] = kSecClassGenericPassword
+		query[kSecAttrAccount] = key
+		query[kSecValueData] = data
+		if SecItemDelete(query as CFDictionary) != noErr {
+			return false
+		} else if data != nil {
+			return SecItemAdd(query as CFDictionary, nil) == noErr
+		}
+		return true
 	}
 }

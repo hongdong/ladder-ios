@@ -1,6 +1,5 @@
-github "Alamofire/Alamofire" "4.7.2"
+github "Alamofire/Alamofire" "4.7.3"
 github "CocoaLumberjack/CocoaLumberjack" "3.4.2"
-github "kishikawakatsumi/KeychainAccess" "v3.1.1"
 github "lexrus/MMDB-Swift" "0.2.8"
 github "robbiehanson/CocoaAsyncSocket" "7.6.3"
 github "xmartlabs/Eureka" "4.2.0"

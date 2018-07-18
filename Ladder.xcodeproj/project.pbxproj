@@ -8,14 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		0445F9AF20676962003993A3 /* Shadowsocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0445F9AE20676962003993A3 /* Shadowsocks.swift */; };
-		044E345220AF46CF005B0CB5 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044E345120AF46CF005B0CB5 /* Alamofire.framework */; };
+		04576F0820F6739900E83AE5 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044E345120AF46CF005B0CB5 /* Alamofire.framework */; };
+		04576F0920F673BB00E83AE5 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044E345120AF46CF005B0CB5 /* Alamofire.framework */; };
 		046CFB2820E6238300BC2769 /* sys_arch.c in Sources */ = {isa = PBXBuildFile; fileRef = 046CFB2720E6238300BC2769 /* sys_arch.c */; };
 		0485CBE72073838C003F596A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0485CBE52073838C003F596A /* InfoPlist.strings */; };
 		0485CBEB207383E6003F596A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0485CBE9207383E6003F596A /* Localizable.strings */; };
 		0495EA552073D49000320501 /* Eureka.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA542073D49000320501 /* Eureka.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		0495EA572073D49C00320501 /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA562073D49B00320501 /* KeychainAccess.framework */; };
 		0495EA5A2073D77500320501 /* NEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0495EA592073D77500320501 /* NEKit.framework */; };
-		04B96FE920AFDA9900D9E1F2 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044E345120AF46CF005B0CB5 /* Alamofire.framework */; };
 		04D1D0BE2065513200F5C4B9 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */; };
 		04D1D0BF2065513D00F5C4B9 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */; };
 		04DC45AE20E6211F00F6841B /* sockets.c in Sources */ = {isa = PBXBuildFile; fileRef = 04DC44CF20E6211F00F6841B /* sockets.c */; };
@@ -142,7 +141,6 @@
 		0485CBEA207383E6003F596A /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0485CBEC20738401003F596A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		0495EA542073D49000320501 /* Eureka.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eureka.framework; path = Carthage/Build/iOS/Eureka.framework; sourceTree = "<group>"; };
-		0495EA562073D49B00320501 /* KeychainAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KeychainAccess.framework; path = Carthage/Build/iOS/KeychainAccess.framework; sourceTree = "<group>"; };
 		0495EA592073D77500320501 /* NEKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NEKit.framework; path = Carthage/Build/iOS/NEKit.framework; sourceTree = "<group>"; };
 		04AD1AA320E618C100EC40F4 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
@@ -373,9 +371,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				044E345220AF46CF005B0CB5 /* Alamofire.framework in Frameworks */,
+				04576F0920F673BB00E83AE5 /* Alamofire.framework in Frameworks */,
 				0495EA552073D49000320501 /* Eureka.framework in Frameworks */,
-				0495EA572073D49C00320501 /* KeychainAccess.framework in Frameworks */,
 				04D1D0BE2065513200F5C4B9 /* NetworkExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -384,7 +381,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04B96FE920AFDA9900D9E1F2 /* Alamofire.framework in Frameworks */,
+				04576F0820F6739900E83AE5 /* Alamofire.framework in Frameworks */,
 				0495EA5A2073D77500320501 /* NEKit.framework in Frameworks */,
 				04D1D0BF2065513D00F5C4B9 /* NetworkExtension.framework in Frameworks */,
 			);
@@ -830,7 +827,6 @@
 			children = (
 				044E345120AF46CF005B0CB5 /* Alamofire.framework */,
 				0495EA542073D49000320501 /* Eureka.framework */,
-				0495EA562073D49B00320501 /* KeychainAccess.framework */,
 				0495EA592073D77500320501 /* NEKit.framework */,
 				04D1D0BD2065513200F5C4B9 /* NetworkExtension.framework */,
 			);
@@ -862,7 +858,7 @@
 				04EA46022064C9B7002578AF /* Frameworks */,
 				04EA46032064C9B7002578AF /* Resources */,
 				04EA462A2064CC41002578AF /* Embed App Extensions */,
-				0495EA582073D4C300320501 /* Run Script */,
+				0495EA582073D4C300320501 /* Run Script (copy frameworks) */,
 			);
 			buildRules = (
 			);
@@ -980,28 +976,39 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0495EA582073D4C300320501 /* Run Script */ = {
+		0495EA582073D4C300320501 /* Run Script (copy frameworks) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Eureka.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/KeychainAccess.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjack.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjackSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Eureka.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/lwip.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/MMDB.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/NEKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Resolver.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sodium.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/tun2socks.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Yaml.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Resolver.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/NEKit.framework",
 			);
-			name = "Run Script";
+			name = "Run Script (copy frameworks)";
 			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaAsyncSocket.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaLumberjack.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaLumberjackSwift.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Eureka.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/lwip.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/MMDB.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/NEKit.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Resolver.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sodium.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/tun2socks.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Yaml.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1334,7 +1341,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/PacketTunnel/src/include ${SRCROOT}/PacketTunnel/lwip/src/include";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/PacketTunnel/src/include $(SRCROOT)/PacketTunnel/lwip/src/include";
 			};
 			name = Debug;
 		};
@@ -1364,7 +1371,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = PacketTunnel/BridgingHeader.h;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/PacketTunnel/src/include ${SRCROOT}/PacketTunnel/lwip/src/include";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/PacketTunnel/src/include $(SRCROOT)/PacketTunnel/lwip/src/include";
 			};
 			name = Release;
 		};
